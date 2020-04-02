@@ -24,7 +24,8 @@ const Profile = () => {
         </Col>
         <Col md>
           <h2>{user.name}</h2>
-          <p className="lead text-muted">{user.email}</p>
+          <p className="lead text-muted">ParishId: {user['https://imshaby.by/parishId']}</p>
+        
         </Col>
       </Row>
       <Row>
