@@ -5,12 +5,11 @@ on:
         branches:
             - master
 
-env:
-    DATE: $(date +%Y-%m-%d-%T)
-
 jobs:
     build:
         runs-on: ubuntu-latest
+        env:
+            DATE: $(date +%Y-%m-%d-%T)
         steps:
             - uses: actions/checkout@v2
             - name: List files
