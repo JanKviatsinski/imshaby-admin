@@ -27,8 +27,8 @@ jobs:
             - name: List files
               run: ls -la
 
-    scp -P 3022 -i ~/.ssh/github_actions ~/TEST.txt 59341-1897@gate.mycloud.by:archives/
-    TEST.txt
+    #scp -P 3022 -i ~/.ssh/github_actions ~/TEST.txt 59341-1897@gate.mycloud.by:archives/
+    #TEST.txt
     #    -$(date +%Y-%m-%d-%T)
 #- uses: actions/checkout@v1
     #    - name: Zip Folder
