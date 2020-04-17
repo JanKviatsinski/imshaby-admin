@@ -5,13 +5,16 @@ on:
         branches:
             - master
 
+env:
+    DATE: $(date +%Y-%m-%d-%T)
+
 jobs:
     build:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
             - name: List files
-              run: ls -la
+              run: ${{env.DATE}}
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
@@ -19,14 +22,15 @@ jobs:
             - name: NPM run build
               run: npm run build
             - name: TAR dist folder
-              run: tar -czf release-$(date +%Y-%m-%d).tar.gz ./dist
-
-            #            - name: Creating Zip Folder
-#              run: zip -r release.zip
+              run: tar -czf release.tar.gz ./dist
+#            - name: Copy to server
+#              run: scp -P ${{SSH_PORT}} release.tar.gz ${{secrets.SSH_USERNAME}}@${{secrets.SSH_HOST}}:/archives/
             - name: List files
               run: ls -la
 
-
+    scp -P 3022 -i ~/.ssh/github_actions ~/TEST.txt 59341-1897@gate.mycloud.by:archives/
+    TEST.txt
+    #    -$(date +%Y-%m-%d-%T)
 #- uses: actions/checkout@v1
     #    - name: Zip Folder
     #      run: zip -r release.zip .
