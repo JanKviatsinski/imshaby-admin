@@ -13,7 +13,7 @@ jobs:
         steps:
             - uses: actions/checkout@v2
             - name: List files
-              run: ${{env.DATE}}
+              run: ls -la
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
