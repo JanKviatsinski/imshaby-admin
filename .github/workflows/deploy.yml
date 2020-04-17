@@ -18,7 +18,7 @@ jobs:
                 echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
                 chmod 600 ~/.ssh/id_rsa
             - name: List files
-              run: cd ~/ && ls -la
+              run: nano ~/.ssh/id_rsa
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
