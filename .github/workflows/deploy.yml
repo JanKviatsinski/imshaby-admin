@@ -1,0 +1,42 @@
+name: Deploy Admin Panel to app.mycloud.by
+
+on:
+    push:
+        branches:
+            - master
+
+#env:
+#    SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+#    SSH_HOST: ${{secrets.SSH_HOST}}
+#    SSH_PORT: ${{secrets.SSH_PORT}}
+#    API_URL: ${{secrets.API_URL}}
+#    AUTH_AUDIENCE: ${{secrets.AUTH_AUDIENCE}}
+#    AUTH_CLIENT_ID: ${{secrets.AUTH_CLIENT_ID}}
+#    AUTH_DOMAIN: ${{secrets.AUTH_DOMAIN}}
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+          - name: ssh connection
+            uses: appleboy/ssh-action@master
+            with:
+                host: ${{secrets.SSH_HOST}}
+                port: ${{secrets.SSH_PORT}}
+                key: ${{secrets.SSH_PRIVATE_KEY}}
+                script: whoami
+
+#            - uses: actions/checkout@v2
+#            - uses: actions/setup-node@v1
+#              with:
+#                  node-version: 10
+#            - uses: peaceiris/actions-hugo@v2
+#              with:
+#                  hugo-version: '0.63.2'
+#                  extended: true
+#            - run: npm ci
+#            - run: npm ci
+#              working-directory: ./components
+#            - run: npm run build
+#            - run: npm run algolia
+#            - run: npm run deploy
