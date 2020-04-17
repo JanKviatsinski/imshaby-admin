@@ -12,8 +12,14 @@ jobs:
             - uses: actions/checkout@v2
             - name: List files
               run: ls -la
-            - name: Creating Zip Folder
-              run: zip -r release.zip
+            - name: Use NodeJS v.12
+              uses: actions/setup-node@v1
+              with:
+                  node-version: '12.x'
+            - name: NODE VERSION
+              run: node -v
+#            - name: Creating Zip Folder
+#              run: zip -r release.zip
             - name: List files
               run: ls -la
 
