@@ -9,14 +9,27 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-          - name: ssh connection
-            uses: appleboy/ssh-action@master
-            with:
-                host: ${{secrets.SSH_HOST}}
-                port: ${{secrets.SSH_PORT}}
-                username: ${{secrets.SSH_USERNAME}}
-                key: ${{secrets.SSH_PRIVATE_KEY}}
-                script: whoami
+            - uses: actions/checkout@master
+
+            - name: SCP zip to remoute server
+              uses: appleboy/scp-action@master
+              with:
+                  host: ${{secrets.SSH_HOST}}
+                  port: ${{secrets.SSH_PORT}}
+                  username: ${{secrets.SSH_USERNAME}}
+                  key: ${{secrets.SSH_PRIVATE_KEY}}
+                  source: "index.html"
+                  target: "~"
+
+
+            - name: ssh connection
+                uses: appleboy/ssh-action@master
+                with:
+                    host: ${{secrets.SSH_HOST}}
+                    port: ${{secrets.SSH_PORT}}
+                    username: ${{secrets.SSH_USERNAME}}
+                    key: ${{secrets.SSH_PRIVATE_KEY}}
+                    script: ls -la
 
 #            - uses: actions/checkout@v2
 #            - uses: actions/setup-node@v1
