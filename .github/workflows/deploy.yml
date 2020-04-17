@@ -17,15 +17,16 @@ jobs:
                 mkdir ~/.ssh
                 echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
                 chmod 600 ~/.ssh/id_rsa
-                ssh-keyscan github.com >> ~/.ssh/known_hosts
-                ssh-keyscan gate.mycloud.by >> ~/.ssh/known_hosts
+                ssh-keyscan -t rsa github.com
+            #                ssh-keyscan github.com >> ~/.ssh/known_hosts
+#                ssh-keyscan gate.mycloud.by >> ~/.ssh/known_hosts
             - name: List files
               run: cat ~/.ssh/id_rsa
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
                   node-version: '12.x'
-            - name: NPM ci && npm run build
+            - name: NPM install and build
               run: npm ci && npm run build
             - name: TAR dist folder
               run: tar -czf release.tar.gz ./dist
