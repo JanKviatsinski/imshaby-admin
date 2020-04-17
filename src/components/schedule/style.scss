@@ -1,0 +1,151 @@
+@import "/src/styles/_variable";
+
+.schedule {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 40px;
+    margin-bottom: 20px;
+  }
+  &__btn {}
+  &__main {
+    background: #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
+    border-radius: 4px;
+    padding: 40px;
+  }
+  &__nav {
+    @include font(1.25rem, true);
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+  }
+  &__title {
+
+  }
+  &__pagination {}
+  &__current-week {
+    opacity: 0;
+    color: var(--main-btn);
+    transition: opacity .2s;
+    @include font(0.8125rem, true);
+    &--active {
+      opacity: 1;
+    }
+  }
+  &__table {
+    margin: 0 -10px;
+  }
+}
+
+.pagination {
+  display: flex;
+  &__prev,
+  &__next {
+    width: 20px;
+    cursor: pointer;
+    text-align: center;
+    &:hover path {
+      fill: var(--main-btn);
+    }
+  }
+  &__date {
+    width: 210px;
+    padding: 0 10px;
+    text-align: center;
+  }
+}
+
+.timetable {
+  td {
+    padding: 15px;
+
+  }
+  &__header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 0 10px 5px;
+    background: var(--main-background);
+    position: sticky;
+    top: 0;
+  }
+  &__head {
+    @include font(0.875rem, true);
+    width: 100%;
+  }
+  &__body {
+    @include font(0.8125rem, false);
+    width: 100%;
+  }
+  &__date {
+    vertical-align: top;
+    width: 160px;
+    padding-left: 0 !important;
+  }
+  &__time {
+    width: 85px;
+    text-align: left;
+    padding-left: 30px !important;
+  }
+  &__lang {
+    width: 125px;
+  }
+  &__comments {
+    /*width: 470px;*/
+  }
+  &__period {
+    width: 150px;
+    text-align: right;
+  }
+  &__repeat {
+    width: 180px;
+  }
+  &__btn {
+    width: 60px;
+    text-align: center;
+  }
+  &__btn-icon {
+    cursor: pointer;
+
+    &:hover path{
+      fill: var(--main-btn);
+    }
+  }
+
+  &__main {
+    /*padding: 15px 10px;*/
+  }
+  &__section {
+    padding: 0 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    &:first-child {
+      border-top-color: transparent;
+    }
+  }
+  &__week {}
+  &__weekday {
+    text-transform: capitalize;
+  }
+  &__day {}
+
+  &__list {
+
+  }
+  &__line {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    &:first-child {
+      border-bottom-color: transparent;
+    }
+    &:last-child {
+      border-bottom-color: transparent;
+    }
+  }
+}
+
+.period {
+  text-align: right;
+  &__start {}
+  &__end {}
+  &__date {}
+}

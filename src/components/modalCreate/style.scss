@@ -1,0 +1,17 @@
+@import "/src/styles/_variable";
+
+.success {
+  &__list {}
+  &__item {
+    @include font(0.8125rem);
+    margin-bottom: 20px;
+  }
+  &__title {
+    @include font(0.8125rem, true);
+    padding-right: 15px;
+    display: inline-block;
+  }
+  &__value {
+    display: inline-block;
+  }
+}

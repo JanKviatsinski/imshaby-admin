@@ -1,0 +1,29 @@
+/* global css */
+@font-face {
+  font-family: "Open Sans";
+  src: url("/assets/fonts/OpenSans-Regular.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: "Open Sans Bold";
+  src: url("/assets/fonts/OpenSans-SemiBold.ttf") format("opentype");
+}
+
+@mixin font($size: false, $bold: false, $lh: false) {
+  @if $bold {
+    font-family: 'Open Sans Bold', Helvetica, Arial, sans-serif;
+  }@else {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  }
+  @if $size { font-size: $size; }
+  @if $lh { line-height: $lh; }
+}
+
+:root {
+  --main-color: rgba(0, 0, 0, 1);
+  --second-color: rgba( 0, 0, 0, 0.3);
+  --main-background: #FFF;
+  --main-btn: rgb(183, 32, 37);
+  --disabled-btn: rgba(183, 32, 37, .5);
+  --error: red;
+}

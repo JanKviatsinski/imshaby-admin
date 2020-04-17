@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <path fill="#B72025"
+          d="M27.302 46.286c-2.05 12.534 6.45 24.362 18.984 26.412s24.362-6.45 26.412-18.984m-3.849-.63c-1.695 10.362-11.472 17.477-21.933 15.765s-17.46-11.57-15.765-21.933"
+          transform="rotate(331.985 50 50)">
+        <animateTransform attributeName="transform" attributeType="XML" type="rotate" dur="1s" from="0 50 50"
+                          to="360 50 50" repeatCount="indefinite"/>
+    </path>
+</svg>
