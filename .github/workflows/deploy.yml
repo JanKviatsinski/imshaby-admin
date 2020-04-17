@@ -21,7 +21,7 @@ jobs:
             - name: NPM run build
               run: npm run build
             - name: TAR dist folder
-              run: tar -czf release.tar.gz ./dist
+              run: tar -czf release-${{env.DATE}}.tar.gz ./dist
 #            - name: Copy to server
 #              run: scp -P ${{SSH_PORT}} release.tar.gz ${{secrets.SSH_USERNAME}}@${{secrets.SSH_HOST}}:/archives/
             - name: List files
