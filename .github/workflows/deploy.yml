@@ -1,4 +1,4 @@
-name: Deploy Admin Panel to app.mycloud.by
+name: Deploy
 
 on:
     push:
@@ -16,9 +16,12 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: '12.x'
-            - name: NODE VERSION
-              run: node -v
-#            - name: Creating Zip Folder
+            - name: NPM run build
+              run: npm run build
+            - name: TAR dist folder
+              run: tar -czf release-$(date +%Y-%m-%d).tar.gz ./dist
+
+            #            - name: Creating Zip Folder
 #              run: zip -r release.zip
             - name: List files
               run: ls -la
