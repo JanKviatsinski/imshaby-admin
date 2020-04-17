@@ -28,7 +28,7 @@ jobs:
             - name: TAR dist folder
               run: tar -czf release.tar.gz ./dist
             - name: Copy to server
-              run: scp -P ${{secrets.SSH_PRIVATE_KEY}} release.tar.gz ${{secrets.SSH_USERNAME}}@${{secrets.SSH_HOST}}:archives/
+              run: scp -P release.tar.gz ${{secrets.SSH_USERNAME}}@${{secrets.SSH_HOST}}:archives/
             - name: List files
               run: ls -la
 
