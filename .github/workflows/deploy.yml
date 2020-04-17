@@ -5,15 +5,6 @@ on:
         branches:
             - master
 
-#env:
-#    SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-#    SSH_HOST: ${{secrets.SSH_HOST}}
-#    SSH_PORT: ${{secrets.SSH_PORT}}
-#    API_URL: ${{secrets.API_URL}}
-#    AUTH_AUDIENCE: ${{secrets.AUTH_AUDIENCE}}
-#    AUTH_CLIENT_ID: ${{secrets.AUTH_CLIENT_ID}}
-#    AUTH_DOMAIN: ${{secrets.AUTH_DOMAIN}}
-
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -23,6 +14,7 @@ jobs:
             with:
                 host: ${{secrets.SSH_HOST}}
                 port: ${{secrets.SSH_PORT}}
+                username: ${{secrets.SSH_USERNAME}}
                 key: ${{secrets.SSH_PRIVATE_KEY}}
                 script: whoami
 
@@ -40,3 +32,11 @@ jobs:
 #            - run: npm run build
 #            - run: npm run algolia
 #            - run: npm run deploy
+#env:
+#    SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+#    SSH_HOST: ${{secrets.SSH_HOST}}
+#    SSH_PORT: ${{secrets.SSH_PORT}}
+#    API_URL: ${{secrets.API_URL}}
+#    AUTH_AUDIENCE: ${{secrets.AUTH_AUDIENCE}}
+#    AUTH_CLIENT_ID: ${{secrets.AUTH_CLIENT_ID}}
+#    AUTH_DOMAIN: ${{secrets.AUTH_DOMAIN}}
