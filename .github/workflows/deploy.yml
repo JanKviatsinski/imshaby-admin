@@ -23,12 +23,12 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: '12.x'
-            - name: NPM run build
-              run: npm run build
+            - name: NPM ci && npm run build
+              run: npm ci && npm run build
             - name: TAR dist folder
               run: tar -czf release.tar.gz ./dist
             - name: Copy to server
-              run: scp -P release.tar.gz ${{secrets.SSH_USERNAME}}@${{secrets.SSH_HOST}}:archives/
+              run: scp -P -i ~/.ssh/id_rsa release.tar.gz ${{secrets.SSH_USERNAME}}@${{secrets.SSH_HOST}}:archives/
             - name: List files
               run: ls -la
 
