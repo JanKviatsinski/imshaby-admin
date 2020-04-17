@@ -8,8 +8,8 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-        env:
-            DATE: $(date +%Y-%m-%d-%T)
+#        env:
+#            DATE: $(date +%Y-%m-%d-%T)
         steps:
             - uses: actions/checkout@v2
             - name: Create ssh-key file
@@ -18,7 +18,7 @@ jobs:
                 echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
                 chmod 600 ~/.ssh/id_rsa
             - name: List files
-              run: nano ~/.ssh/id_rsa
+              run: cat ~/.ssh/id_rsa
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
