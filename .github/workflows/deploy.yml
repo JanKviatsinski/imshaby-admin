@@ -20,8 +20,8 @@ jobs:
                 ssh-keyscan -t rsa github.com
             #                ssh-keyscan github.com >> ~/.ssh/known_hosts
 #                ssh-keyscan gate.mycloud.by >> ~/.ssh/known_hosts
-            - name: List files
-              run: cat ~/.ssh/id_rsa
+            - name: Connect via SSH
+              run: ssh -i ~/.ssh/id_rsa 59341-1897@gate.mycloud.by -p 3022
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
