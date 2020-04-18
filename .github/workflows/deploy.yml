@@ -36,4 +36,4 @@ jobs:
               run: ls -la
 
             - name: Copy to server
-              run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" /dist ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/www/static/
+              run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" dist/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/www/static/
