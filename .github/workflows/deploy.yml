@@ -17,9 +17,6 @@ jobs:
                 mkdir ~/.ssh
                 echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
                 chmod 600 ~/.ssh/id_rsa
-                ssh-keyscan -t rsa github.com
-            #                ssh-keyscan github.com >> ~/.ssh/known_hosts
-#                ssh-keyscan gate.mycloud.by >> ~/.ssh/known_hosts
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
@@ -29,57 +26,4 @@ jobs:
             - name: TAR dist folder
               run: tar -czf release.tar.gz ./dist
             - name: Copy to server
-              run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" dist/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:archives/
-
-              #run: scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa release.tar.gz ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:archives/
-            - name: List files
-              run: ls -la
-
-    #scp -P 3022 -i ~/.ssh/github_actions ~/TEST.txt 59341-1897@gate.mycloud.by:archives/
-    #TEST.txt
-    #    -$(date +%Y-%m-%d-%T)
-#- uses: actions/checkout@v1
-    #    - name: Zip Folder
-    #      run: zip -r release.zip .
-    #    - name: Release to Github
-    #      run: echo "Release"
-#            - name: SCP zip to remoute server
-#              uses: appleboy/scp-action@master
-#              with:
-#                  host: ${{secrets.SSH_HOST}}
-#                  port: ${{secrets.SSH_PORT}}
-#                  username: ${{secrets.SSH_USERNAME}}
-#                  key: ${{secrets.SSH_PRIVATE_KEY}}
-#                  source: "index.html"
-#                  target: "~"
-#            - name: ssh connection
-#                uses: appleboy/ssh-action@master
-#                with:
-#                    host: ${{secrets.SSH_HOST}}
-#                    port: ${{secrets.SSH_PORT}}
-#                    username: ${{secrets.SSH_USERNAME}}
-#                    key: ${{secrets.SSH_PRIVATE_KEY}}
-#                    script: ls -la
-
-#            - uses: actions/checkout@v2
-#            - uses: actions/setup-node@v1
-#              with:
-#                  node-version: 10
-#            - uses: peaceiris/actions-hugo@v2
-#              with:
-#                  hugo-version: '0.63.2'
-#                  extended: true
-#            - run: npm ci
-#            - run: npm ci
-#              working-directory: ./components
-#            - run: npm run build
-#            - run: npm run algolia
-#            - run: npm run deploy
-#env:
-#    SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
-#    SSH_HOST: ${{secrets.SSH_HOST}}
-#    SSH_PORT: ${{secrets.SSH_PORT}}
-#    API_URL: ${{secrets.API_URL}}
-#    AUTH_AUDIENCE: ${{secrets.AUTH_AUDIENCE}}
-#    AUTH_CLIENT_ID: ${{secrets.AUTH_CLIENT_ID}}
-#    AUTH_DOMAIN: ${{secrets.AUTH_DOMAIN}}
+              run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" /dist ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/www/static/
