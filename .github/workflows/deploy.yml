@@ -8,22 +8,29 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-#        env:
+        env:
+            API_URL: ${{secrets.API_URL}}
+            AUTH_AUDIENCE: ${{secrets.AUTH_AUDIENCE}}
+            AUTH_CLIENT_ID: ${{secrets.AUTH_CLIENT_ID}}
+            AUTH_DOMAIN: ${{secrets.AUTH_DOMAIN}}
 #            DATE: $(date +%Y-%m-%d-%T)
         steps:
             - uses: actions/checkout@v2
+
             - name: Create ssh-key file
               run: |
                 mkdir ~/.ssh
                 echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
                 chmod 600 ~/.ssh/id_rsa
+                ssh-keyscan -t rsa github.com
+
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
                   node-version: '12.x'
+
             - name: NPM install and build
               run: npm ci && npm run build
-            - name: TAR dist folder
-              run: tar -czf release.tar.gz ./dist
+
             - name: Copy to server
               run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" /dist ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:~/www/static/
