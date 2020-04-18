@@ -29,7 +29,7 @@ jobs:
             - name: TAR dist folder
               run: tar -czf release.tar.gz ./dist
             - name: Copy to server
-              run: rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" dist/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:archives/
+              run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" dist/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:archives/
 
               #run: scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa release.tar.gz ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:archives/
             - name: List files
