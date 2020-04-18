@@ -20,8 +20,6 @@ jobs:
                 ssh-keyscan -t rsa github.com
             #                ssh-keyscan github.com >> ~/.ssh/known_hosts
 #                ssh-keyscan gate.mycloud.by >> ~/.ssh/known_hosts
-            - name: Connect via SSH
-              run: ssh -i ~/.ssh/id_rsa 59341-1897@gate.mycloud.by -p 3022
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
@@ -31,7 +29,9 @@ jobs:
             - name: TAR dist folder
               run: tar -czf release.tar.gz ./dist
             - name: Copy to server
-              run: scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa release.tar.gz ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:archives/
+              run: rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" dist/ ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:archives/
+
+              #run: scp -P ${{ secrets.SSH_PORT }} -i ~/.ssh/id_rsa release.tar.gz ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:archives/
             - name: List files
               run: ls -la
 
