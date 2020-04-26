@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Modal from "../modal";
 import './style.scss';
 
@@ -8,13 +8,13 @@ interface IProps {
   onClose: (boolean) => void;
 }
 
-const DeleteModalResult = ({ visible, onClose }: IProps) => {
+const ApproveModalResult = ({ visible, onClose }: IProps) => {
 
   return <>
     <Modal visible={visible}>
       <section className="modal">
         <header className="modal__header">
-          <span className="modal__title">Імша выдалена!</span>
+          <span className="modal__title">Расклад пацверджаны</span>
         </header>
 
         <section className="modal__body">
@@ -31,4 +31,4 @@ const DeleteModalResult = ({ visible, onClose }: IProps) => {
   </>
 };
 
-export default DeleteModalResult
+export default ApproveModalResult

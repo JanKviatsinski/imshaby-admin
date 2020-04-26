@@ -32,7 +32,9 @@ const request = (url, token, method?, data?) => {
     },
     body: JSON.stringify(data)
   })
+    .then(res => handleError(res))
     .then(res => res.json())
+    .catch(err => console.error(err))
 };
 
 const requestPost = (url, token, method?, data?) => {
@@ -44,5 +46,12 @@ const requestPost = (url, token, method?, data?) => {
     },
     body: JSON.stringify(data)
   })
+    .then(res => handleError(res))
     .then(res => res.json())
+    .catch(err => console.error(err))
 };
+
+const handleError = (res) => {
+  if(!res.ok) throw new Error(res.statusText)
+  return res
+}

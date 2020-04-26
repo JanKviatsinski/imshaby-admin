@@ -19,7 +19,6 @@ interface IProps {
 const TIME_REGEXP = '^([01]\\d|2[0-3]):([0-5]\\d\\b)';
 
 const CreateModal = ({ visible, onClose, onSave }: IProps) => {
-  const [isVisible, setVisible] = useState<boolean>(false);
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [time, setTime] = useState<string>('');
@@ -31,11 +30,6 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
   const [notes, setNotes] = useState<string>('');
 
   const [submitted, setSubmitted] = useState<boolean>(false);
-
-  useEffect(() => {
-    setVisible(visible);
-    document.querySelector('body').classList.toggle('fixed', visible);
-  }, [visible]);
 
   useEffect(() => {
     setDaysValid(!!days.length);
@@ -76,7 +70,6 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
 
   const handleCreate = () => {
     setSubmitted(true);
-
     if (!validate()) return;
 
     if (!isMassPeriodic) {
@@ -92,7 +85,6 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
       onSave(data);
       return;
     }
-
 
     // periodic mass
     const data : IMassCreate = {
@@ -112,10 +104,8 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
   };
 
 
-
-  if (!isVisible) return <></>;
   return <>
-    <Modal visible={isVisible}>
+    <Modal visible={visible}>
       <section className="modal">
         <header className="modal__header">
           <span className="modal__title">Дадаць Імшу</span>
