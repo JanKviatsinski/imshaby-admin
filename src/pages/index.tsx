@@ -20,6 +20,7 @@ import CreateModalResult from "../components/modalCreate/result";
 import DeleteModal from "../components/modalDelete";
 import DeleteModalResult from "../components/modalDelete/result";
 import Loading from "../components/loading";
+import ApproveModalResult from "../components/modalApprove";
 
 const USER_PARISH_ID = 'https://imshaby.by/parishId';
 
@@ -32,6 +33,7 @@ const MainPage = () => {
   const [visibleCreateResult, setVisibleCreateResult] = useState<boolean>(false);
   const [visibleDelete, setVisibleDelete] = useState<boolean>(false);
   const [visibleDeleteResult, setVisibleDeleteResult] = useState<boolean>(false);
+  const [visibleApproveResult, setVisibleApproveResult] = useState<boolean>(false);
   const [collapsedInfo, setCollapsedInfo] = useState<boolean>(false);
   const [actualPeriod, setActualPeriod] = useState<Date>(new Date());
   const [schedule, setSchedule] = useState<IWeekSchedule[]>({});
@@ -90,11 +92,12 @@ const MainPage = () => {
     };
     const mass: IMassCreate = await createMass(token, params);
     setVisibleCreate(false);
-    setNewMass(mass);
-    setVisibleCreateResult(true);
-
-    const schedule = await fetchDataSchedule();
-    setSchedule(schedule);
+    if (mass) {
+      setNewMass(mass);
+      setVisibleCreateResult(true);
+      const schedule = await fetchDataSchedule();
+      setSchedule(schedule);
+    }
   };
 
   const handleSelectToDelete = (mass: IMassCreate, date: Date) => {
@@ -105,17 +108,19 @@ const MainPage = () => {
 
   const handleDelete = async (id: string, period: {from: string, to: string}) => {
     const token = await getTokenSilently();
-    const mass = await deleteMass(token, id, period);
-    setVisibleDeleteResult(true);
+    const res = await deleteMass(token, id, period);
     setVisibleDelete(false);
-
-    const schedule = await fetchDataSchedule();
-    setSchedule(schedule);
+    if (res) {
+      setVisibleDeleteResult(true);
+      const schedule = await fetchDataSchedule();
+      setSchedule(schedule);
+    }
   };
 
   const handleApprove = async () => {
     const token = await getTokenSilently();
     const res = await approveSchedule(token, parishId);
+    setVisibleApproveResult(true);
     const resParish = await fetchParishInfo();
   }
 
@@ -176,16 +181,16 @@ const MainPage = () => {
         </header>
       </section>
 
-
       {
         schedule && <Schedule weekSchedule={schedule} changeDate={(date) => setDate(date)} date={date} deleteMass={handleSelectToDelete}/>
       }
 
     </section>
     <CreateModal visible={visibleCreate} onClose={handleCreateClose} onSave={handleSaveMass} />
-    <CreateModalResult mass={newMass} visible={visibleCreateResult} onClose={handleSuccessClose} />
+    <CreateModalResult visible={visibleCreateResult} mass={newMass}  onClose={handleSuccessClose} />
     <DeleteModal visible={visibleDelete} onClose={() => setVisibleDelete(false)} onSave={handleDelete} mass={deletedMass} date={deletedMassDate} />
     <DeleteModalResult visible={visibleDeleteResult} onClose={() => setVisibleDeleteResult(false)} />
+    <ApproveModalResult visible={visibleApproveResult} onClose={() => setVisibleApproveResult(false)}/>
 
   </>
 };

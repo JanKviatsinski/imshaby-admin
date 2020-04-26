@@ -45,8 +45,7 @@ const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
     }
   }, [mass])
 
-
-  if (!visible) return <></>;
+  if(!mass) return <></>
   return <>
     <Modal visible={visible}>
       <section className="modal">

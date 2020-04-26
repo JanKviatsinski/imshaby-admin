@@ -34,7 +34,6 @@ const DeleteModal = ({ visible, onClose, onSave, mass, date }: IProps) => {
       setTitle(`Выдаліць абраную Імшу?`);
     }else {
       setTitle(`Выдаліць Імшу ${format(date, 'dd MMMM yyyy, eeeeee', {locale: be})} ?`);
-
     }
 
   }, [mass])
@@ -70,9 +69,7 @@ const DeleteModal = ({ visible, onClose, onSave, mass, date }: IProps) => {
     onSave(mass.id, period);
   }
 
-
-
-  if (!visible) return <></>;
+  if (!mass) return <></>;
   return <>
     <Modal visible={visible}>
       <section className="modal">
