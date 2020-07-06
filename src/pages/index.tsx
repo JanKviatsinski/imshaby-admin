@@ -51,7 +51,6 @@ const MainPage = () => {
     fetchParishInfo();
   }, [parishId]);
 
-
   useEffect(() => {
     if(!parishId) return;
 
@@ -190,8 +189,7 @@ const MainPage = () => {
     <CreateModalResult visible={visibleCreateResult} mass={newMass}  onClose={handleSuccessClose} />
     <DeleteModal visible={visibleDelete} onClose={() => setVisibleDelete(false)} onSave={handleDelete} mass={deletedMass} date={deletedMassDate} />
     <DeleteModalResult visible={visibleDeleteResult} onClose={() => setVisibleDeleteResult(false)} />
-    <ApproveModalResult visible={visibleApproveResult} onClose={() => setVisibleApproveResult(false)}/>
-
+    <ApproveModalResult visible={visibleApproveResult} onClose={() => setVisibleApproveResult(false)} />
   </>
 };
 
