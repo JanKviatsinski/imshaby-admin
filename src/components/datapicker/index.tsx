@@ -5,13 +5,16 @@ import be from 'date-fns/locale/be';
 import './stylesheets/datepicker.scss';
 
 interface IProps {
-  onChange: (date: Date) => void;
-  selected: Date;
+  onChange: (date: Date | null) => void;
+  selected: Date | null;
 }
 
 const DateTimePicker = ({onChange, selected}: IProps) => {
 
-  const handleChange = (date) => {
+  const handleChange = (date: Date | [Date, Date] | null) => {
+    if (Array.isArray(date)) {
+      return;
+    }
     onChange(date);
   };
 

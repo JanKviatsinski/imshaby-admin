@@ -8,7 +8,7 @@ import be from 'date-fns/locale/be';
 import { IMassCreate } from "../../api/interfeces";
 
 import Repeat from "../repeat";
-import InfinityIcon from '/assets/images/infinity.svg';
+///import InfinityIcon from '/assets/images/infinity.svg';
 import Modal from "../modal";
 
 import './style.scss';
@@ -17,7 +17,7 @@ import './style.scss';
 interface IProps {
   visible: boolean;
   mass: IMassCreate;
-  onClose: (boolean) => void;
+  onClose: () => void;
 }
 
 const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
@@ -26,7 +26,7 @@ const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
   const [period, setPeriod] = useState<string>('');
 
   useEffect(() => {
-    if(!mass) return;
+    if(!mass || !mass.singleStartTimestamp) return;
 
     if (!mass.days) {
       const startDate = fromUnixTime(mass.singleStartTimestamp);
@@ -71,9 +71,7 @@ const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
               <li className="success__item">
                 <div className="success__title">Тэрмін дзеяння</div>
                 <div className="success__value">
-                  {
-                    period ? period : <InfinityIcon />
-                  }
+
                 </div>
               </li>
               {

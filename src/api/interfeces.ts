@@ -1,4 +1,5 @@
 export interface IParish {
+  id?: string;
   imgPath: string;
   userId: null;
   name: string;
@@ -11,8 +12,8 @@ export interface IParish {
     pl: ILocalization;
   },
   needUpdate: boolean;
-  lastModifiedDate: string;
-  lastMassActualDate: string;
+  lastModifiedDate: Date;
+  lastMassActualDate: Date;
   cityId: string;
   phone: null;
   supportPhone: string;
@@ -33,12 +34,17 @@ interface ILocalization {
 
 
 export interface IWeekSchedule {
-  startWeekDate: string;
+  startWeekDate: Date;
   schedule: ISchedule[];
 }
 
 export interface ISchedule {
   date: Date;
+  massHours: IMassHours[];
+}
+
+export interface IScheduleResponse {
+  date: string;
   massHours: IMassHours[];
 }
 
@@ -55,6 +61,8 @@ export interface IMassHoursData {
   langCode: string;
   lastModifiedDate: string;
   needUpdate: boolean;
+  online: boolean;
+  id: string;
   parish: {
     address: string;
     gps: null;
@@ -67,18 +75,19 @@ export interface IMassHoursData {
 
 export interface IMassCreate {
   id?: string;
-  cityId: string;
+  cityId?: string;
   langCode: string;
   time: string;
   days: number[] | null;
   notes: string;
-  localizedInfo: {
+  localizedInfo?: {
     ru: ILocalization;
     en: ILocalization;
     pl: ILocalization;
   },
-  parishId: string;
+  parishId?: string;
   startDate: string;
-  endDate: string;
+  endDate?: string;
   singleStartTimestamp?: number;
+  online: boolean;
 }

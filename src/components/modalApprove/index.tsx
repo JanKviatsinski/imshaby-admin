@@ -5,7 +5,7 @@ import './style.scss';
 
 interface IProps {
   visible: boolean;
-  onClose: (boolean) => void;
+  onClose: () => void;
 }
 
 const ApproveModalResult = ({ visible, onClose }: IProps) => {

@@ -9,7 +9,7 @@ interface IProps {
 const Modal = ({ visible, children}: IProps) => {
 
   useEffect(() => {
-    document.querySelector('body').classList.toggle('fixed', visible);
+    document.querySelector('body')?.classList.toggle('fixed', visible);
   }, [visible]);
 
   if (!visible) return <></>;

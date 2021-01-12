@@ -1,0 +1,63 @@
+@import "./src/styles/_mixin";
+
+.header {
+  display: flex;
+  align-items: center;
+  background: var(--main-text-color);
+  margin-bottom: 16px;
+  &__container {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  min-height: 50px;
+  padding: 0 20px;
+  font-size: 18px;
+  color: var(--main-button-text-color);
+  text-transform: uppercase;
+  &:hover {
+    background: var(--hover-btn-background);
+  }
+  &:active {
+    background: var(--active-btn-background);
+  }
+  &__active, &__active:hover {
+    background: var(--normal-btn-background);
+  }
+  @include tablet() {
+    min-height: 32px;
+    padding: 0 16px;
+    font-size: 15px;
+  }
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+  @include tablet() {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.logo,
+.menu,
+.help {
+  display: flex;
+  .icon {
+    margin-right: 10px;
+  }
+}
+.logo .icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 20px;
+  @include tablet() {
+    width: 20px;
+    height: 20px;
+  }
+}

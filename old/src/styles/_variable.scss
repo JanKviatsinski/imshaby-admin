@@ -1,0 +1,35 @@
+/* global css */
+
+@font-face {
+  font-family: "Open Sans";
+  src: url("/assets/fonts/OpenSans-Regular.ttf") format("opentype");
+}
+
+@font-face {
+  font-family: "Open Sans Bold";
+  src: url("/assets/fonts/OpenSans-SemiBold.ttf") format("opentype");
+}
+
+:root {
+  --main-text-color: #333333;
+  --second-text-color: #B3B3B3;
+
+  --main-icon-color: #494949;
+  --main-background: #F2F2F2;
+
+  --main-button-text-color: #fff;
+
+  --normal-btn-background: #B72025;
+  --disabled-btn-background: #E98185;
+  --hover-btn-background: #D3040B;
+  --active-btn-background: #89181C;
+
+
+
+
+  --second-color: rgba( 0, 0, 0, 0.3);
+
+  --main-btn: rgb(183, 32, 37);
+  --disabled-btn: rgba(183, 32, 37, .5);
+  --error: red;
+}

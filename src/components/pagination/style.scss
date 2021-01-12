@@ -1,0 +1,17 @@
+@import "./src/styles/_mixin";
+
+.pagination {
+  &__left {
+    cursor: pointer;
+  }
+  &__right {
+    cursor: pointer;
+  }
+  &__date {
+    @include font(18px, true, 25px);
+    margin: 0 5px;
+  }
+  &__icon path{
+    fill: var(--main-text-color)
+  }
+}

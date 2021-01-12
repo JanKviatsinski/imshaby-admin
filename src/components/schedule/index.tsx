@@ -1,167 +1,91 @@
-import React, {useState, useEffect} from 'react';
-import {IMassCreate, ISchedule, IWeekSchedule} from "../../api/interfeces";
-import be from 'date-fns/locale/be';
-//import { addDays, parse, format, startOfWeek, subDays, compareDesc, setHours, setMinutes } from 'date-fns';
-import addDays from 'date-fns/addDays';
-import parse from 'date-fns/parse';
-import format from 'date-fns/format';
-import startOfWeek from 'date-fns/startOfWeek';
-import subDays from 'date-fns/subDays';
-import compareDesc from 'date-fns/compareDesc';
-import setHours from 'date-fns/setHours';
-import setMinutes from 'date-fns/setMinutes';
-
-import ArrowLeftIcon from '/assets/images/arrow-left.svg';
-import ArrowRightIcon from '/assets/images/arrow-right.svg';
-import DeleteIcon from '/assets/images/delete.svg';
-import InfinityIcon from '/assets/images/infinity.svg';
-import Repeat from "../repeat";
+import React, { useState, useEffect } from "react";
+import format from "date-fns/format";
+import {useAuth0} from "@auth0/auth0-react";
+import Pagination from "../pagination";
+import {getWeekSchedule, createMass} from "../../api";
+import {IMassCreate, IParish, IWeekSchedule} from "../../api/interfeces";
 import './style.scss';
+import Loading from "../loading";
+import TimeTable from "../timetable";
+import compareDesc from "date-fns/compareDesc";
+import CreateModal from "../modalCreate";
 
-interface IProps {
-  weekSchedule: IWeekSchedule,
-  changeDate: (date: Date) => void;
-  deleteMass: (mass: IMassCreate, date: Date) => void;
-  date: Date;
+interface props {
+  parish: IParish;
 }
 
-const Schedule = ({weekSchedule,date, changeDate, deleteMass} : IProps) => {
-  const [isCurrentWeek, setCurrentWeek] = useState<boolean>(true);
-  const [schedule, setSchedule] = useState<ISchedule[]>([]);
-
+const Schedule = ({ parish } : props) => {
+  const { getAccessTokenSilently } = useAuth0();
+  const [date, setDate] = useState<Date>(new Date());
+  const [weekSchedule, setWeekSchedule] = useState<IWeekSchedule | null>(null);
+  const [isCurrentWeek, setCurrentWeek] = useState<boolean>(false);
+  const [triggerCreateModal, setTriggerCreateModal] = useState<boolean>(false);
 
   useEffect(() => {
-    setSchedule(weekSchedule.schedule?.map((i) => ({...i, date: parse(i.date, 'MM/dd/yyyy', new Date())})));
+    if (!weekSchedule) return;
+    setCurrentWeek(compareDesc(new Date(), weekSchedule.startWeekDate) < 0);
   }, [weekSchedule]);
 
   useEffect(() => {
-    setCurrentWeek(compareDesc(new Date(), date) < 0);
+    fetchSchedule();
   }, [date]);
 
-  const handleNextWeek = () => changeDate(addDays(date, 7));
-  const handlePrevWeek = () => changeDate(subDays(date, 7));
-  const handleSetCurrentWeek = () => changeDate(startOfWeek(new Date()));
 
-  const handleDeleteMass = (mass, date, hour) => {
-    let currentDate = setHours(date, hour.split(':')[0])
-    currentDate = setMinutes(currentDate, hour.split(':')[1]);
+  const fetchSchedule = async () => {
+    if (!parish?.id) {
+      return;
+    }
+    const token = await getAccessTokenSilently();
+    const schedule = await getWeekSchedule(token, parish.id, format(date, 'dd-MM-yyyy'));
+    setWeekSchedule(schedule);
+  }
 
-    deleteMass(mass, currentDate);
-  };
+  const handleChangeDate = (date: Date) => {
+    setDate(date);
+  }
 
-  if(!schedule?.length) return <div>Loading...</div>;
+  const handleMassCreateOpen = () => {
+    setTriggerCreateModal(true);
+  }
+  const handleMassCreateClose = () => {
+    setTriggerCreateModal(false);
+  }
+  const handleMassCreate = async (data: IMassCreate) => {
+    const newMass = {
+      ...data,
+      cityId: parish.cityId,
+      parishId: parish.id,
+    }
+    const token = await getAccessTokenSilently();
+    const mass = await createMass(token, newMass);
+    const schedule = await fetchSchedule();
+    setTriggerCreateModal(false);
+  }
 
+  if (!weekSchedule) return <Loading />
   return <>
     <section className="schedule">
-      <section className="schedule__main">
-        <header className="schedule__nav">
-          <div className="schedule__title">Расклад на тыдзень</div>
-          <div className="schedule__pagination pagination">
-            {
-              !isCurrentWeek && <>
-                <span className="pagination__prev" onClick={() => handlePrevWeek()}> <ArrowLeftIcon/> </span>
-              </>
-            }
+      <header className="schedule__header">
+        <div className="schedule__add">
+          <button className="btn" onClick={handleMassCreateOpen}>Дадаць Імшу</button>
+        </div>
+        <div className="schedule__pagination">
+          <Pagination schedule={weekSchedule} changeDate={handleChangeDate} isCurrentWeek={isCurrentWeek}/>
+        </div>
+        <div className="schedule__currentWeek">
+          <button className="btn btn-empty" onClick={() => handleChangeDate(new Date())} disabled={isCurrentWeek}>
+            Бягучы тыдзень
+          </button>
+        </div>
+      </header>
 
-            <span
-              className="pagination__date"> {format(schedule[0].date, 'd')} - {format(schedule[6].date, 'dd MMMM', {locale: be})}</span>
-            <span className="pagination__next" onClick={() => handleNextWeek()}> <ArrowRightIcon/> </span>
-          </div>
-          <span className={`schedule__current-week ${!isCurrentWeek ? 'schedule__current-week--active' : ''}`}
-                onClick={handleSetCurrentWeek}>Бягучы тыдзень</span>
-        </header>
-
-        <section className="schedule__table timetable">
-          <header className="timetable__header">
-            <table className="timetable__head">
-              <tbody>
-              <tr>
-                <td className="timetable__date">Дзень тыдня</td>
-                <td className="timetable__time">Час</td>
-                <td className="timetable__lang">Мова Імшы</td>
-                <td className="timetable__comments">Каментарый</td>
-                <td className="timetable__period">Тэрмін дзеяння</td>
-                <td className="timetable__repeat">Паўтор</td>
-                <td className="timetable__btn"/>
-              </tr>
-              </tbody>
-            </table>
-          </header>
-
-          <section className="timetable__main">
-            {
-              schedule.map((day: ISchedule, i) => {
-                const countMass = day.massHours
-                  .reduce((count: number, current) => count + current.data.length, 0);
-
-                return <React.Fragment key={i}>
-                  <section className="timetable__section">
-                    <table className="timetable__body">
-                      <tbody>
-                      <tr className="timetable__line">
-                        <td className="timetable__date" rowSpan={countMass + 1}>
-                          <div className="timetable__weekday">{format(day.date, 'eeee', {locale: be})}</div>
-                          <div className="timetable__day">{format(day.date, 'dd MMMM', {locale: be})}</div>
-                        </td>
-                      </tr>
-
-                      {
-                        day.massHours.map((massHours, k) => <React.Fragment key={k}>
-                          {
-                            massHours.data.map((data, n) => <React.Fragment key={n}>
-
-                              <tr className="timetable__line">
-                                <td className="timetable__time">{massHours.hour}</td>
-                                <td className="timetable__lang">{data.langCode}</td>
-                                <td className="timetable__comments">{data.info}</td>
-                                <td className="timetable__period">
-                                  <div className="period">
-                                    {
-                                      data.startDate && data.endDate && data.days && <>
-                                        <span className="period__start">з </span>
-                                        <span className="period__date">{format(new Date(data.startDate), 'dd.MM.yyyy')}</span>
-                                        <br/>
-                                        <span className="period__end">па </span>
-                                        <span className="period__date">{format(new Date(data.endDate), 'dd.MM.yyyy')}</span>
-                                      </>
-                                    }
-                                    {
-                                      !data.endDate && data.days && <>
-                                        <InfinityIcon/>
-                                      </>
-                                    }
-                                    {
-                                      !data.days && <span className="period__date">Адзінкавая</span>
-                                    }
-                                  </div>
-                                </td>
-                                <td className="timetable__repeat">
-                                  {
-                                    data.days && <Repeat week={data.days} />
-                                  }
-                                </td>
-                                <td className="timetable__btn">
-                                  <DeleteIcon className="timetable__btn-icon" onClick={() => handleDeleteMass(data, day.date, massHours.hour)}/>
-                                </td>
-                              </tr>
-                            </React.Fragment>)
-                          }
-
-                        </React.Fragment>)
-                      }
-                      </tbody>
-                    </table>
-                  </section>
-                </React.Fragment>
-              })
-            }
-
-          </section>
-        </section>
-
+      <section className="schedule__content">
+        <TimeTable schedule={weekSchedule.schedule}/>
       </section>
     </section>
-  </>
-};
+
+    <CreateModal visible={triggerCreateModal} onClose={handleMassCreateClose} onSave={handleMassCreate}/>
+  </>;
+}
 
 export default Schedule;
