@@ -9,6 +9,7 @@ import Loading from "../loading";
 import TimeTable from "../timetable";
 import compareDesc from "date-fns/compareDesc";
 import CreateModal from "../modalCreate";
+import CreateModalResult from "../modalCreate/result";
 
 interface props {
   parish: IParish;
@@ -20,6 +21,8 @@ const Schedule = ({ parish } : props) => {
   const [weekSchedule, setWeekSchedule] = useState<IWeekSchedule | null>(null);
   const [isCurrentWeek, setCurrentWeek] = useState<boolean>(false);
   const [triggerCreateModal, setTriggerCreateModal] = useState<boolean>(false);
+  const [triggerCreateResultModal, setTriggerCreateResultModal] = useState<boolean>(false);
+  const [mass, setMass] = useState<IMassCreate | null>(null);
 
   useEffect(() => {
     if (!weekSchedule) return;
@@ -59,7 +62,9 @@ const Schedule = ({ parish } : props) => {
     const token = await getAccessTokenSilently();
     const mass = await createMass(token, newMass);
     const schedule = await fetchSchedule();
+    setMass(mass)
     setTriggerCreateModal(false);
+    setTriggerCreateResultModal(true);
   }
 
   if (!weekSchedule) return <Loading />
@@ -85,6 +90,7 @@ const Schedule = ({ parish } : props) => {
     </section>
 
     <CreateModal visible={triggerCreateModal} onClose={handleMassCreateClose} onSave={handleMassCreate}/>
+    <CreateModalResult visible={triggerCreateResultModal} onClose={() => setTriggerCreateResultModal(false)} mass={mass} />
   </>;
 }
 

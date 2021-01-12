@@ -12,19 +12,6 @@
     display: inline-block;
   }
   &__value {
-    display: inline-flex;
-  }
-  &__youtube {
-    width: 26px;
-    height: 18px;
-    margin-left: 20px;
-    path {
-      fill: var(--main-icon-color);
-    }
-  }
-  &__infinity {
-    path {
-      fill: var(--main-icon-color);
-    }
+    display: inline-block;
   }
 }

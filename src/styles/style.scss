@@ -67,6 +67,10 @@ a, path {
       color: var(--active-btn-background);
     }
   }
+  &-small {
+    padding: 7px 20px;
+    min-width: 215px;
+  }
 }
 
 
