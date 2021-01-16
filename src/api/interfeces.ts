@@ -53,6 +53,7 @@ export interface IMassHours {
   data: IMassHoursData[];
 }
 export interface IMassHoursData {
+  id: string;
   days: number[];
   startDate: string | null;
   endDate: string | null;
@@ -62,7 +63,6 @@ export interface IMassHoursData {
   lastModifiedDate: string;
   needUpdate: boolean;
   online: boolean;
-  id: string;
   parish: {
     address: string;
     gps: null;
@@ -86,8 +86,13 @@ export interface IMassCreate {
     pl: ILocalization;
   },
   parishId?: string;
-  startDate: string;
+  startDate?: string;
   endDate?: string;
   singleStartTimestamp?: number;
-  online: boolean;
+  online: boolean | null;
+}
+
+export interface IPeriod {
+  from: string;
+  to?: string;
 }

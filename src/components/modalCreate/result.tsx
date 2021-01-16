@@ -35,10 +35,11 @@ const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
       setTitle(`Адзінкавая Імша ${format(startDate, 'dd.MM.yyyy')} дададзена!`);
       setPeriod('адзінкавая');
     }else {
-      const startDate = parse(mass.startDate, 'MM/dd/yyyy', new Date());
-      setStartDate(startDate);
-      setTitle('Сталая Імша дададзена!');
-
+      if (mass.startDate) {
+        const startDate = parse(mass.startDate, 'MM/dd/yyyy', new Date());
+        setStartDate(startDate);
+        setTitle('Сталая Імша дададзена!');
+      }
       if (mass.startDate && mass.endDate) {
         const endDate = parse(mass.endDate, 'MM/dd/yyyy', new Date());
         setPeriod(`${format(startDate, 'dd MMMM yyyy', {locale: be})} - ${format(endDate, 'dd MMMM yyyy', {locale: be})}`);
@@ -48,8 +49,8 @@ const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
 
   if(!mass) return <></>
   return <>
-    <Modal visible={visible}>
-      <section className="modal">
+    <Modal visible={visible} onClose={() => onClose()}>
+      <section className="modal__section">
         <header className="modal__header">
           <span className="modal__title">{title}</span>
         </header>

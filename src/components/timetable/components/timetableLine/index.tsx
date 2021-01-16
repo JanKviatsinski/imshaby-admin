@@ -1,17 +1,23 @@
 import React, {useRef, useState} from "react";
 import format from "date-fns/format";
-import {IMassHours} from "../../../../api/interfeces";
+import {IMassHours, IMassHoursData, ISchedule} from "../../../../api/interfeces";
 import Repeat from "../../../repeat";
 import {
   InfinityIcon, YoutubeIcon, DeleteIcon, EditIcon, PauseIcon, PointsIcon
 } from "../../../icons";
 import useClickOutside from "../../../../utils/useClickOutside";
+import CreateModal from "../../../modalCreate";
+import DeleteModal from "../../../modalDelete";
 
 interface props {
   massHours: IMassHours;
+  onDelete: (item: IMassHoursData) => void;
+  onEdit: (id: string) => void;
 }
 
-const TimeTableLine = ({ massHours }: props) => {
+const TimeTableLine = ({ massHours, onDelete, onEdit }: props) => {
+
+
   return <React.Fragment>
     {
       massHours.data.map((item, i) => (
@@ -29,6 +35,10 @@ const TimeTableLine = ({ massHours }: props) => {
                   <span className="period__start">з </span>
                   <span className="period__date">{format(new Date(item.startDate), 'dd.MM.yyyy')}</span>
                   <br/>
+                </>
+              }
+              {
+                item.endDate && item.days && <>
                   <span className="period__end">па </span>
                   <span className="period__date">{format(new Date(item.endDate), 'dd.MM.yyyy')}</span>
                 </>
@@ -39,7 +49,7 @@ const TimeTableLine = ({ massHours }: props) => {
                 </>
               }
               {
-                !item.days && <span className="period__date">Адзінкавая</span>
+                !item.days && <span className="period__date">адзінкавая</span>
               }
             </div>
           </td>
@@ -50,10 +60,10 @@ const TimeTableLine = ({ massHours }: props) => {
           </td>
           <td className="timetable__btn">
             <div className="timetable__actions">
-              <button className="timetable__btnIcon">
+              <button className="timetable__btnIcon" onClick={()=> onEdit(item.id)}>
                 <EditIcon className="timetable__icon" />
               </button>
-              <button className="timetable__btnIcon">
+              <button className="timetable__btnIcon" onClick={()=> onDelete(item)}>
                 <DeleteIcon className="timetable__icon" />
               </button>
             </div>
@@ -63,48 +73,5 @@ const TimeTableLine = ({ massHours }: props) => {
     }
   </React.Fragment>;
 }
-//
-// interface propsTimeTableActions {
-//   onSelect: (i: string) => void;
-//   lineNumber: string | null;
-// }
-// const TimeTableActions = ({ onSelect, lineNumber }: propsTimeTableActions) => {
-//   const [actionOpen, setActionOpen] = useState<boolean>(false);
-//   const ref = useRef(null);
-//
-//   useClickOutside(ref, () => {
-//     setActionOpen(false);
-//     onSelect(null);
-//   })
-//
-//   const handleClick = () => {
-//     setActionOpen(!actionOpen);
-//     onSelect(lineNumber);
-//   }
-//
-//   return (
-//     <section className="actions" ref={ref}>
-//       <button onClick={handleClick} className="timetable__btnIcon">
-//         <PointsIcon className="timetable__icon" />
-//       </button>
-//
-//       <div className={`timetable__action ${actionOpen ? 'timetable__action--open' : ''}`} >
-//         <button className="timetable__btnIcon">
-//           <PauseIcon className="timetable__icon" />
-//         </button>
-//         <button className="timetable__btnIcon">
-//           <EditIcon className="timetable__icon" />
-//         </button>
-//         <button className="timetable__btnIcon">
-//           <DeleteIcon className="timetable__icon" />
-//         </button>
-//         <button onClick={handleClick} className={`timetable__btnIcon ${actionOpen ? 'timetable__btnIcon--open' : ''}`}>
-//           <PointsIcon className="timetable__icon" />
-//         </button>
-//       </div>
-//     </section>
-//   )
-// }
-
 
 export default TimeTableLine;

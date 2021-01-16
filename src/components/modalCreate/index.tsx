@@ -10,43 +10,75 @@ import {CloseIcon, YoutubeIcon} from "../icons";
 import {IMassCreate} from "../../api/interfeces";
 import Modal from "../modal";
 import DateTimePicker from "../datapicker";
+import fromUnixTime from "date-fns/fromUnixTime";
+import parse from "date-fns/parse";
 
 interface IProps {
   visible: boolean;
   onClose: Function;
   onSave: Function;
+  mass: IMassCreate | null;
 }
 
 const TIME_REGEXP = '^([01]\\d|2[0-3]):([0-5]\\d\\b)';
 const NOTES_LIMIT = 300;
+const DEFAULT_LANG = 'беларуская'
 
-const CreateModal = ({ visible, onClose, onSave }: IProps) => {
-  const [startDate, setStartDate] = useState<Date>(new Date());
+const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
+  const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [time, setTime] = useState<string>('');
   const [timeValid, setTimeValid] = useState<boolean>(false);
   const [days, setDays] = useState<number[]>([]);
   const [daysValid, setDaysValid] = useState<boolean>(true);
+  const [startDateValid, setStartDateValid] = useState<boolean>(true);
   const [isMassPeriodic, setMassPeriodic] = useState<boolean>(false);
   const [online, setOnline] = useState<boolean>(false);
-  const [langCode, setLangCode] = useState<string>('беларуская');
+  const [langCode, setLangCode] = useState<string>(DEFAULT_LANG);
   const [notes, setNotes] = useState<string>('');
-
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
-    setDaysValid(!!days.length);
-  }, [days]);
+    if (!mass) {
+      resetForm();
+      return;
+    }
+
+    if (mass.singleStartTimestamp) {
+      setStartDate(fromUnixTime(mass.singleStartTimestamp));
+      setTime(format(fromUnixTime(mass.singleStartTimestamp), 'HH:mm'))
+    }else if (mass.startDate) {
+      setStartDate(parse(mass.startDate, 'MM/dd/yyyy', new Date()));
+      setTime(mass.time || '');
+    }else {
+      setStartDate(null);
+      setTime(mass.time || '');
+    }
+    setEndDate(mass.endDate ? new Date(mass.endDate) : null);
+    setDays(mass.days ? mass.days : []);
+    setMassPeriodic(!!mass.days?.length);
+    setOnline(!!mass.online);
+    setLangCode(mass.langCode);
+    setNotes(mass.notes || '');
+  }, [mass])
 
   useEffect(() => {
-    const isValid = new RegExp(TIME_REGEXP).test(time);
-    setTimeValid(isValid);
-  }, [time]);
+    validate();
+  }, [days, time, startDate]);
+
+  const resetForm = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setTime('');
+    setDays( []);
+    setMassPeriodic(false);
+    setOnline(false);
+    setLangCode(DEFAULT_LANG);
+    setNotes('');
+  }
 
   const handleChangeStartDate = (date: Date | null) => {
-    if (date) {
-      setStartDate(date)
-    }
+    setStartDate(date)
   };
   const handleChangeEndDate = (date: Date | null) => {
     setEndDate(date)
@@ -73,18 +105,22 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
   const validate = (): boolean => {
     const timeValid = new RegExp(TIME_REGEXP).test(time);
     const daysValid = isMassPeriodic ? !!days.length : true;
+    const startDateForSingleMass = !isMassPeriodic ? !!startDate : true;
 
     setTimeValid(timeValid);
     setDaysValid(daysValid);
+    setStartDateValid(startDateForSingleMass)
 
-    return timeValid && daysValid
+    return timeValid && daysValid && startDateForSingleMass
   };
 
   const handleCreate = () => {
     setSubmitted(true);
-    if (!validate() || !startDate) return;
+    if (!validate()) return;
 
     if (!isMassPeriodic) {
+      if (!startDate) return;
+
       const hourTime = time.split(':');
       let date = setHours(startDate, Number(hourTime[0]));
       date = setMinutes(date, Number(hourTime[1]));
@@ -106,9 +142,11 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
       notes,
       time,
       online,
-      startDate: format(startDate, 'MM/dd/yyyy'),
     };
 
+    if (startDate) {
+      data.startDate = format(startDate, 'MM/dd/yyyy');
+    }
     if (endDate) {
       data.endDate = format(endDate, 'MM/dd/yyyy');
     }
@@ -119,8 +157,8 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
 
 
   return <>
-    <Modal visible={visible}>
-      <section className="modal">
+    <Modal visible={visible} onClose={() => onClose()}>
+      <section className="modal__section">
         <header className="modal__header">
           <span className="modal__title">Дадаць Імшу</span>
           <button className="modal__header-close" onClick={() => onClose()}>
@@ -133,7 +171,7 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
           <section className="form">
             <section className="form__row form__row--column">
               <div className="form__col form__col--large">
-                <div className="form__label">Дата</div>
+                <div className={`form__label ${!startDateValid && submitted ? 'form__label--invalid' : ''}`}>Дата</div>
                 <div className="form__field">
                   <DateTimePicker selected={startDate} onChange={handleChangeStartDate} />
                 </div>

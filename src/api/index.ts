@@ -1,4 +1,4 @@
-import {IMassCreate, IParish, IScheduleResponse, IWeekSchedule} from "./interfeces";
+import {IMassCreate, IParish, IPeriod, IScheduleResponse, IWeekSchedule} from "./interfeces";
 import parse from "date-fns/parse";
 
 const BASE_URL = process.env.REACT_APP_API_URL;
@@ -21,18 +21,29 @@ export const getWeekSchedule = async (token: string, id: string, date: string): 
 };
 
 export const createMass = async (token: string, data: IMassCreate) => {
-  return await request(BASE_URL + 'mass', token,'POST', data)
+  const mass = await request(BASE_URL + 'mass', token,'POST', data);
+  return Promise.resolve(mass);
+
 };
 
-export const deleteMass = async (token: string, id: string, period: {from: string, to: string}) => {
-  const url = new URLSearchParams(period);
-  return await request(BASE_URL + `mass/${id}/` + url, token,'DELETE')
+export const deleteMass = async (token: string, id: string, period: IPeriod) => {
+  const url = new URLSearchParams();
+  if (period?.from){
+    url.append('from', period.from)
+  }
+  if (period?.to){
+    url.append('to', period.to)
+  }
+  return await request(BASE_URL + `mass/${id}?` + url, token,'DELETE')
 };
 
 export const approveSchedule = async (token: string, parishId: string): Promise<any> => {
   return await request(BASE_URL + `mass?parishId=${parishId}`, token,'PUT')
 };
 
+export const getMassById = async (token: string, massId: string): Promise<any> => {
+  return await request(BASE_URL + `mass/${massId}`, token,'GET')
+};
 
 
 

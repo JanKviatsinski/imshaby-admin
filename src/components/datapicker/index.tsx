@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {SyntheticEvent} from 'react';
 import DatePicker from 'react-datepicker';
 import be from 'date-fns/locale/be';
 
@@ -11,7 +11,8 @@ interface IProps {
 
 const DateTimePicker = ({onChange, selected}: IProps) => {
 
-  const handleChange = (date: Date | [Date, Date] | null) => {
+  const handleChange = (date: Date | [Date, Date] | null, e: SyntheticEvent) => {
+    e.stopPropagation();
     if (Array.isArray(date)) {
       return;
     }
@@ -23,7 +24,7 @@ const DateTimePicker = ({onChange, selected}: IProps) => {
       locale={be}
       dateFormat="dd/MM/yyyy"
       selected={selected}
-      onChange={date => handleChange(date)}
+      onChange={handleChange}
     />
   </>
 };

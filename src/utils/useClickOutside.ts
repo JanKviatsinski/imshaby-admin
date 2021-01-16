@@ -1,24 +1,21 @@
 import React, { useEffect } from "react";
 
-interface ICLickOutside{
-  ref: React.RefObject<any>;
-  callback: () => void;
-}
+const useOutsideClick = (ref: React.RefObject<any>, callback: () => void) => {
 
-const useOutsideClick = ({ref, callback}: ICLickOutside) => {
   const handleClick = (e: MouseEvent) => {
+    console.log(e.target);
     if (ref.current && !ref.current.contains(e.target)) {
       callback();
     }
   };
 
   useEffect(() => {
-    document.addEventListener("click", handleClick);
+    document.addEventListener("click", handleClick, false);
 
     return () => {
-      document.removeEventListener("click", handleClick);
+      document.removeEventListener("click", handleClick, false);
     };
-  });
+  }, []);
 };
 
 export default useOutsideClick;

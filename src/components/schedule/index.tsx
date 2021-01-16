@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import format from "date-fns/format";
 import {useAuth0} from "@auth0/auth0-react";
 import Pagination from "../pagination";
-import {getWeekSchedule, createMass} from "../../api";
-import {IMassCreate, IParish, IWeekSchedule} from "../../api/interfeces";
-import './style.scss';
+import {getWeekSchedule, createMass, deleteMass, getMassById} from "../../api";
+import {IMassCreate, IMassHoursData, IParish, IPeriod, IWeekSchedule} from "../../api/interfeces";
 import Loading from "../loading";
 import TimeTable from "../timetable";
 import compareDesc from "date-fns/compareDesc";
 import CreateModal from "../modalCreate";
 import CreateModalResult from "../modalCreate/result";
+import './style.scss';
 
 interface props {
   parish: IParish;
@@ -23,6 +23,7 @@ const Schedule = ({ parish } : props) => {
   const [triggerCreateModal, setTriggerCreateModal] = useState<boolean>(false);
   const [triggerCreateResultModal, setTriggerCreateResultModal] = useState<boolean>(false);
   const [mass, setMass] = useState<IMassCreate | null>(null);
+  const [editedMass, setEditedMass] = useState<IMassCreate | null>(null);
 
   useEffect(() => {
     if (!weekSchedule) return;
@@ -48,6 +49,7 @@ const Schedule = ({ parish } : props) => {
   }
 
   const handleMassCreateOpen = () => {
+    setEditedMass(null);
     setTriggerCreateModal(true);
   }
   const handleMassCreateClose = () => {
@@ -65,6 +67,20 @@ const Schedule = ({ parish } : props) => {
     setMass(mass)
     setTriggerCreateModal(false);
     setTriggerCreateResultModal(true);
+  }
+
+  const handleMassDelete = async (id: string, period: IPeriod) => {
+    const token = await getAccessTokenSilently();
+    const mass = await deleteMass(token, id, period);
+    const schedule = await fetchSchedule();
+    setTriggerCreateResultModal(false);
+  }
+
+  const handleMassEdit = async (id: string) => {
+    const token = await getAccessTokenSilently();
+    const mass = await getMassById(token, id);
+    setEditedMass(mass);
+    setTriggerCreateModal(true);
   }
 
   if (!weekSchedule) return <Loading />
@@ -85,11 +101,11 @@ const Schedule = ({ parish } : props) => {
       </header>
 
       <section className="schedule__content">
-        <TimeTable schedule={weekSchedule.schedule}/>
+        <TimeTable schedule={weekSchedule.schedule} onDelete={handleMassDelete} onEdit={handleMassEdit}/>
       </section>
     </section>
 
-    <CreateModal visible={triggerCreateModal} onClose={handleMassCreateClose} onSave={handleMassCreate}/>
+    <CreateModal visible={triggerCreateModal} onClose={handleMassCreateClose} onSave={handleMassCreate} mass={editedMass}/>
     <CreateModalResult visible={triggerCreateResultModal} onClose={() => setTriggerCreateResultModal(false)} mass={mass} />
   </>;
 }
