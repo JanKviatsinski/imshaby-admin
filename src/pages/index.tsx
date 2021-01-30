@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import {USER_PARISH_FIELD} from "../utils/constans";
 import { IParish } from "../api/interfeces";
 import Header from "../components/header";
 import Loading from "../components/loading";
 
 import Section from "../components/section";
 import SectionHeader from "../components/sectionHeader";
-import {USER_PARISH_FIELD} from "../utils/constans";
+
 import {getParishById} from "../api";
 import Parish from "../components/parish";
 import Schedule from "../components/schedule";
