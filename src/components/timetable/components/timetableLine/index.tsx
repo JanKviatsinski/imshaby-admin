@@ -17,6 +17,14 @@ interface props {
 
 const TimeTableLine = ({ massHours, onDelete, onEdit }: props) => {
 
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>, item: IMassHoursData) => {
+    e.stopPropagation();
+    onDelete(item);
+  }
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>, item: IMassHoursData) => {
+    e.stopPropagation();
+    onEdit(item.id);
+  }
 
   return <React.Fragment>
     {
@@ -60,10 +68,10 @@ const TimeTableLine = ({ massHours, onDelete, onEdit }: props) => {
           </td>
           <td className="timetable__btn">
             <div className="timetable__actions">
-              <button className="timetable__btnIcon" onClick={()=> onEdit(item.id)}>
+              <button className="timetable__btnIcon" onClick={(e) => handleEdit(e, item)}>
                 <EditIcon className="timetable__icon" />
               </button>
-              <button className="timetable__btnIcon" onClick={()=> onDelete(item)}>
+              <button className="timetable__btnIcon" onClick={(e) => handleDelete(e, item)}>
                 <DeleteIcon className="timetable__icon" />
               </button>
             </div>

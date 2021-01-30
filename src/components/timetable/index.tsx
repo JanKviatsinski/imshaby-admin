@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { IMassHoursData, IPeriod, ISchedule } from "../../api/interfeces";
+import {IMassHours, IMassHoursData, IPeriod, ISchedule} from "../../api/interfeces";
 import { useMediaQuery } from "react-responsive";
 import format from "date-fns/format";
 import be from "date-fns/locale/be";
@@ -7,10 +7,11 @@ import isToday from "date-fns/isToday";
 import TimeTableLine from "./components/timetableLine";
 import DeleteModal from "../modalDelete";
 import './style.scss';
+import {setHours, setMinutes} from "date-fns";
 
 interface props {
   schedule: ISchedule[];
-  onDelete: (id: string, period: IPeriod) => void;
+  onDelete: (id: string, period: IPeriod, mass: IMassHoursData, date: Date) => void;
   onEdit: (id: string) => void;
 }
 
@@ -22,14 +23,18 @@ const TimeTable = ({ schedule, onDelete, onEdit }: props) => {
   const [tab, setTab] = useState<number>(0);
   const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
 
-  const handleDelete = (massHoursData: IMassHoursData, day: ISchedule) => {
-    setSelectedDay(day.date);
+  const handleDeleteModalOpen = (massHoursData: IMassHoursData, day: ISchedule, massHours: IMassHours) => {
+    const [hour, minute] = massHours.hour.split(':');
+    let date = setHours(day.date, Number(hour))
+    date = setMinutes(date, Number(minute))
+    setSelectedDay(date);
     setSelectedMass(massHoursData);
     setVisibleDelete(true);
   }
 
-  const handleSave = (massId: string, period: IPeriod) => {
-    onDelete(massId, period);
+  const handleDelete = (massId: string, period: IPeriod) => {
+    if (!selectedMass) return;
+    onDelete(massId, period, selectedMass, selectedDay);
     setVisibleDelete(false);
   }
 
@@ -75,7 +80,7 @@ const TimeTable = ({ schedule, onDelete, onEdit }: props) => {
                         day.massHours.map((massHours, k) =>
                           <TimeTableLine
                             massHours={massHours} key={k}
-                            onDelete={(data) => handleDelete(data, day)}
+                            onDelete={(data) => handleDeleteModalOpen(data, day, massHours)}
                             onEdit={onEdit}
                           />)
                       }
@@ -128,7 +133,7 @@ const TimeTable = ({ schedule, onDelete, onEdit }: props) => {
                   schedule[tab].massHours.map((massHours, k) =>
                     <TimeTableLine
                       massHours={massHours} key={k}
-                      onDelete={(data) => handleDelete(data, schedule[tab])}
+                      onDelete={(data) => handleDeleteModalOpen(data, schedule[tab], massHours)}
                       onEdit={onEdit}
                     />)
                 }
@@ -143,7 +148,7 @@ const TimeTable = ({ schedule, onDelete, onEdit }: props) => {
 
 
     </section>
-    <DeleteModal visible={visibleDelete} onSave={handleSave} onClose={() => setVisibleDelete(false)} mass={selectedMass} date={selectedDay}/>
+    <DeleteModal visible={visibleDelete} onSave={handleDelete} onClose={() => setVisibleDelete(false)} mass={selectedMass} date={selectedDay}/>
   </>;
 }
 

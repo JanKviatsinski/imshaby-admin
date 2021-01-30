@@ -1,5 +1,5 @@
 export interface IParish {
-  id?: string;
+  id: string;
   imgPath: string;
   userId: null;
   name: string;
@@ -15,11 +15,12 @@ export interface IParish {
   lastModifiedDate: Date;
   lastMassActualDate: Date;
   cityId: string;
-  phone: null;
+  phone: string;
   supportPhone: string;
   email: string;
   lastModifiedEmail: null;
   website: string;
+  broadcastUrl: string;
   _links: {
     self: {
       href: string;

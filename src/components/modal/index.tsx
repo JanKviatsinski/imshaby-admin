@@ -1,5 +1,6 @@
 import React, {useEffect, ReactNode, useRef} from 'react';
 import './style.scss';
+import useOutsideClick from "../../utils/useClickOutside";
 
 interface IProps {
   visible: boolean;
@@ -9,6 +10,10 @@ interface IProps {
 
 const Modal = ({ visible, children, onClose }: IProps) => {
   const nodeRef = useRef(null);
+
+  useOutsideClick(nodeRef, () => {
+    onClose();
+  })
 
   const handleClick = (e: MouseEvent) => {
     console.log('handle click');

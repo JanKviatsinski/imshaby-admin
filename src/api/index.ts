@@ -45,7 +45,9 @@ export const getMassById = async (token: string, massId: string): Promise<any> =
   return await request(BASE_URL + `mass/${massId}`, token,'GET')
 };
 
-
+export const updateParishInfo = async (token: string, parishId: string, data: IParish): Promise<IParish> => {
+  return await request(BASE_URL + `parish/${parishId}`, token,'PUT', data)
+};
 
 
 const request = (url: string, token: string, method?: string, data?: any) => {
@@ -61,20 +63,6 @@ const request = (url: string, token: string, method?: string, data?: any) => {
     .then(res => res.json())
     .catch(err => console.error(err))
 };
-//
-// const requestPost = (url, token, method?, data?) => {
-//   return fetch(url, {
-//     method: method,
-//     headers: {
-//       Authorization: `Bearer ${token}`,
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(data)
-//   })
-//     .then(res => handleError(res))
-//     .then(res => res.json())
-//     .catch(err => console.error(err))
-// };
 
 const handleError = (res: any) => {
   if(!res.ok) throw new Error(res.statusText)

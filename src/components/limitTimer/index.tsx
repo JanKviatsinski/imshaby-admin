@@ -21,7 +21,7 @@ const LimitTimer = ({ lastDate, limitDays, attentionClass } : props) => {
   useEffect(() => {
     const timer = setInterval(calculate, 1000);
     return () => clearInterval(timer);
-  }, []);
+  }, [lastDate, limitDays]);
 
   const calculate = () => {
     const secondsBetween = Math.abs(differenceInSeconds(new Date(), lastDate));

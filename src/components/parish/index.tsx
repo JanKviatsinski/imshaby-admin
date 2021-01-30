@@ -1,17 +1,20 @@
 import React from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useToasts } from "react-toast-notifications";
+
 import { IParish } from "../../api/interfeces";
 import LimitTimer from "../limitTimer";
-
-import './style.scss';
 import {approveSchedule} from "../../api";
-import { useAuth0 } from "@auth0/auth0-react";
+import './style.scss';
 
 interface props {
   parish: IParish;
+  onApprove: () => void;
 }
 
-const Parish = ({ parish } : props) => {
+const Parish = ({ parish, onApprove } : props) => {
   const { getAccessTokenSilently } = useAuth0();
+  const { addToast } = useToasts();
 
 
 
@@ -20,7 +23,9 @@ const Parish = ({ parish } : props) => {
       return;
     }
     const token = await getAccessTokenSilently();
-    const approve = await approveSchedule(token, parish.id)
+    const approve = await approveSchedule(token, parish.id);
+    addToast('Рассклад пацверджаны');
+    onApprove();
   }
 
   return (

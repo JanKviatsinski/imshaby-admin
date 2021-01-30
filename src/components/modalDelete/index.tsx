@@ -22,8 +22,6 @@ enum Radio {
 }
 
 const DeleteModal = ({ visible, onClose, onSave, mass, date }: IProps) => {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const [value, setValue] = useState<Radio>(Radio.one);
   const [title, setTitle] = useState<string>('');
   const [period, setPeriod] = useState<string>('');
@@ -66,7 +64,7 @@ const DeleteModal = ({ visible, onClose, onSave, mass, date }: IProps) => {
         period.to = format(date, 'dd-MM-yyyy');
         break;
       case Radio.feature:
-        period.from = format(date, 'dd-MM-yyyy');
+        period.from = '';
         period.to = '';
         break;
     }
@@ -89,7 +87,7 @@ const DeleteModal = ({ visible, onClose, onSave, mass, date }: IProps) => {
           <section className="success">
             <ul className="success__list">
               {
-                !mass.days && <>
+                !mass.days.length && <>
                   <li className="success__item">
                     <div className="success__title">Дата</div>
                     <div className="success__value">{format(date, 'dd MMMM yyyy, eeeeee', {locale: be})}</div>
@@ -99,7 +97,7 @@ const DeleteModal = ({ visible, onClose, onSave, mass, date }: IProps) => {
               <li className="success__item">
                 <div className="success__title">Час</div>
                 <div className="success__value">
-                  {format(date, 'hh.mm')}
+                  {format(date, 'HH.mm')}
                   {mass.online && <YoutubeIcon className="success__youtube"/>}
                 </div>
               </li>

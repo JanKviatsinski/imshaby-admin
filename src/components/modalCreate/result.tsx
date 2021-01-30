@@ -3,16 +3,11 @@ import fromUnixTime from 'date-fns/fromUnixTime';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import be from 'date-fns/locale/be';
-
-import { IMassCreate } from "../../api/interfeces";
-
-import Repeat from "../repeat";
-///import InfinityIcon from '/assets/images/infinity.svg';
-import Modal from "../modal";
 import {YoutubeIcon, InfinityIcon} from "../icons";
+import { IMassCreate } from "../../api/interfeces";
+import Repeat from "../repeat";
+import Modal from "../modal";
 import './style.scss';
-
-
 
 interface IProps {
   visible: boolean;

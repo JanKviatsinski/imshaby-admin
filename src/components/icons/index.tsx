@@ -13,23 +13,13 @@ import { ReactComponent as DeleteSVG } from "./icons/delete.svg";
 import { ReactComponent as EditSVG } from "./icons/edit.svg";
 import { ReactComponent as PauseSVG } from "./icons/pause.svg";
 import { ReactComponent as PointsSVG } from "./icons/points.svg";
+import { ReactComponent as EmailSVG } from "./icons/email.svg";
+import { ReactComponent as LinkSVG } from "./icons/link.svg";
+import { ReactComponent as MarkerSVG } from "./icons/marker.svg";
+import { ReactComponent as PeopleSVG } from "./icons/people.svg";
+import { ReactComponent as PhoneSVG } from "./icons/phone.svg";
 import { ReactComponent as CloseSVG } from "./icons/close.svg";
 
-
-// import LogoSVG from "./icons/imshaby.svg";
-// import BulbSVG from "./icons/bulb.svg";
-// import ClockSVG from "./icons/clock.svg";
-// import HomeSVG from "./icons/home.svg";
-// import LogoutSVG from "./icons/log-out.svg";
-// import LeftArrowSVG from "./icons/left-arrow.svg";
-// import RightArrowSVG from "./icons/right-arrow.svg";
-// import InfinitySVG from "./icons/infinity.svg";
-// import YoutubeSVG from "./icons/youtube.svg";
-// import DeleteSVG from "./icons/delete.svg";
-// import EditSVG from "./icons/edit.svg";
-// import PauseSVG from "./icons/pause.svg";
-// import PointsSVG from "./icons/points.svg";
-// import CloseSVG from "./icons/close.svg";
 import "./style.scss";
 
 interface props {
@@ -49,5 +39,10 @@ export const DeleteIcon = ({ className } : props) => <DeleteSVG className={class
 export const EditIcon = ({ className } : props) => <EditSVG className={className} />;
 export const PauseIcon = ({ className } : props) => <PauseSVG className={className} />;
 export const PointsIcon = ({ className } : props) => <PointsSVG className={className} />;
+export const EmailIcon = ({ className } : props) => <EmailSVG className={className} />;
+export const LinkIcon = ({ className } : props) => <LinkSVG className={className} />;
+export const MarkerIcon = ({ className } : props) => <MarkerSVG className={className} />;
+export const PeopleIcon = ({ className } : props) => <PeopleSVG className={className} />;
+export const PhoneIcon = ({ className } : props) => <PhoneSVG className={className} />;
 export const CloseIcon = ({ className } : props) => <CloseSVG className={className} />;
 

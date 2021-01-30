@@ -2,14 +2,17 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router, Switch } from "react-router-dom";
 import { Auth0Provider, useAuth0, AppState } from "@auth0/auth0-react";
+import { ToastProvider } from "react-toast-notifications";
+
 import reportWebVitals from './reportWebVitals';
 import history from "./utils/history";
-
-import PrivateRoute from "./components/PrivateRoute";
-import MainPage from "./pages/index";
 import Loading from "./components/loading";
-
+import PrivateRoute from "./components/PrivateRoute";
+import Snackbar from "./components/snackbar";
+import MainPage from "./pages/index";
+import ParishPage from "./pages/parish";
 import "./styles/style.scss"
+
 
 const App = () => {
   const { isLoading } = useAuth0();
@@ -18,6 +21,8 @@ const App = () => {
   return (
     <Router history={history}>
       <Switch>
+        <PrivateRoute path="/schedule" component={ MainPage } />
+        <PrivateRoute path="/parish" component={ ParishPage } />
         <PrivateRoute path="/" component={ MainPage } />
       </Switch>
     </Router>
@@ -40,7 +45,14 @@ ReactDOM.render(
     redirectUri={window.location.origin}
     onRedirectCallback={onRedirectCallback}
   >
-    <App />
+    <ToastProvider
+      autoDismiss
+      autoDismissTimeout={6000}
+      components={{ Toast: Snackbar }}
+      placement="bottom-center"
+    >
+      <App />
+    </ToastProvider>
   </Auth0Provider>,
   document.querySelector('#root')
 );
