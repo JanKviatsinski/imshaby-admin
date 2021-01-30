@@ -28,8 +28,11 @@ jobs:
               with:
                   node-version: '15.x'
 
-            - name: NPM install and build
-              run: npm ci && npm run build
+            - name: NPM install
+              run: npm ci
+
+            - name: NPM build
+              run: CI='' npm run build
 
             - name: List files
               run: cd ./build && ls -la
