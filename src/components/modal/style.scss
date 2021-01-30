@@ -1,4 +1,4 @@
-@import "/src/styles/_variable";
+@import "./src/styles/_mixin";
 
 .modal-wrapper {
   background-color: rgba(0, 0, 0, 0.3);
@@ -7,6 +7,7 @@
   right: 0;
   top: 0;
   bottom: 0;
+  z-index: 1000;
   overflow: auto;
 }
 .modal {
@@ -18,7 +19,7 @@
   padding: 20px 30px;
   position: absolute;
   left: 50%;
-  top: 100px;
+  top: 160px;
   margin-left: -200px;
   &__header {
     margin-bottom: 20px;
@@ -36,8 +37,11 @@
       opacity: .9;
     }
   }
+  &__header-closeIcon path {
+    fill: var(--normal-btn-background);
+  }
   &__title {
-    @include font(1.25rem, true, 1.75);
+    @include font(22px, true, 30px);
   }
 
   &__body {

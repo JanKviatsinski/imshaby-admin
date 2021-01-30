@@ -1,55 +1,92 @@
-import React, { useState, useEffect } from 'react';
-import DateTimePicker from './../datapicker';
-//import { format, getTime, setHours, setMinutes } from 'date-fns';
+import React, {useState, useEffect, ChangeEvent} from 'react';
+
 import format from 'date-fns/format';
 import getTime from 'date-fns/getTime';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
+import {CloseIcon, YoutubeIcon} from "../icons";
 
-import CloseIcon from '/assets/images/close.svg';
+
 import {IMassCreate} from "../../api/interfeces";
 import Modal from "../modal";
+import DateTimePicker from "../datapicker";
+import fromUnixTime from "date-fns/fromUnixTime";
+import parse from "date-fns/parse";
 
 interface IProps {
   visible: boolean;
   onClose: Function;
   onSave: Function;
+  mass: IMassCreate | null;
 }
 
 const TIME_REGEXP = '^([01]\\d|2[0-3]):([0-5]\\d\\b)';
+const NOTES_LIMIT = 300;
+const DEFAULT_LANG = 'беларуская'
 
-const CreateModal = ({ visible, onClose, onSave }: IProps) => {
-  const [startDate, setStartDate] = useState<Date>(new Date());
+const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
+  const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [time, setTime] = useState<string>('');
   const [timeValid, setTimeValid] = useState<boolean>(false);
   const [days, setDays] = useState<number[]>([]);
   const [daysValid, setDaysValid] = useState<boolean>(true);
+  const [startDateValid, setStartDateValid] = useState<boolean>(true);
   const [isMassPeriodic, setMassPeriodic] = useState<boolean>(false);
-  const [langCode, setLangCode] = useState<string>('беларуская');
+  const [online, setOnline] = useState<boolean>(false);
+  const [langCode, setLangCode] = useState<string>(DEFAULT_LANG);
   const [notes, setNotes] = useState<string>('');
-
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   useEffect(() => {
-    setDaysValid(!!days.length);
-  }, [days]);
+    if (!mass) {
+      resetForm();
+      return;
+    }
+
+    if (mass.singleStartTimestamp) {
+      setStartDate(fromUnixTime(mass.singleStartTimestamp));
+      setTime(format(fromUnixTime(mass.singleStartTimestamp), 'HH:mm'))
+    }else if (mass.startDate) {
+      setStartDate(parse(mass.startDate, 'MM/dd/yyyy', new Date()));
+      setTime(mass.time || '');
+    }else {
+      setStartDate(null);
+      setTime(mass.time || '');
+    }
+    setEndDate(mass.endDate ? new Date(mass.endDate) : null);
+    setDays(mass.days ? mass.days : []);
+    setMassPeriodic(!!mass.days?.length);
+    setOnline(!!mass.online);
+    setLangCode(mass.langCode);
+    setNotes(mass.notes || '');
+  }, [mass])
 
   useEffect(() => {
-    const isValid = new RegExp(TIME_REGEXP).test(time);
-    setTimeValid(isValid);
-  }, [time]);
+    validate();
+  }, [days, time, startDate]);
 
-  const handleChangeStartDate = (date: Date) => {
+  const resetForm = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setTime('');
+    setDays( []);
+    setMassPeriodic(false);
+    setOnline(false);
+    setLangCode(DEFAULT_LANG);
+    setNotes('');
+  }
+
+  const handleChangeStartDate = (date: Date | null) => {
     setStartDate(date)
   };
-  const handleChangeEndDate = (date: Date) => {
+  const handleChangeEndDate = (date: Date | null) => {
     setEndDate(date)
   };
   const handleChangeTime = (e: React.FormEvent<HTMLInputElement>) => {
-    setTime(e.target.value);
+    setTime(e.currentTarget.value);
   };
-  const handleSelectDay = (day) => () => {
+  const handleSelectDay = (day: number) => () => {
     const index = days.findIndex((i) => i === day);
     if (index === -1) {
       setDays([...days, day])
@@ -58,14 +95,23 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
       setDays([...days]);
     }
   };
+
+  const handleChangeNotes = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (NOTES_LIMIT - e.target.value.length >= 0) {
+      setNotes(e.target.value)
+    }
+  }
+
   const validate = (): boolean => {
     const timeValid = new RegExp(TIME_REGEXP).test(time);
     const daysValid = isMassPeriodic ? !!days.length : true;
+    const startDateForSingleMass = !isMassPeriodic ? !!startDate : true;
 
     setTimeValid(timeValid);
     setDaysValid(daysValid);
+    setStartDateValid(startDateForSingleMass)
 
-    return timeValid && daysValid
+    return timeValid && daysValid && startDateForSingleMass
   };
 
   const handleCreate = () => {
@@ -73,14 +119,17 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
     if (!validate()) return;
 
     if (!isMassPeriodic) {
+      if (!startDate) return;
+
       const hourTime = time.split(':');
-      let date = setHours(startDate, hourTime[0]);
-      date = setMinutes(date, hourTime[1]);
+      let date = setHours(startDate, Number(hourTime[0]));
+      date = setMinutes(date, Number(hourTime[1]));
 
       const data = {
         singleStartTimestamp: getTime(date) / 1000,
         notes,
         langCode,
+        online,
       };
       onSave(data);
       return;
@@ -92,9 +141,12 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
       days,
       notes,
       time,
-      startDate: format(startDate, 'MM/dd/yyyy'),
+      online,
     };
 
+    if (startDate) {
+      data.startDate = format(startDate, 'MM/dd/yyyy');
+    }
     if (endDate) {
       data.endDate = format(endDate, 'MM/dd/yyyy');
     }
@@ -105,12 +157,12 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
 
 
   return <>
-    <Modal visible={visible}>
-      <section className="modal">
+    <Modal visible={visible} onClose={() => onClose()}>
+      <section className="modal__section">
         <header className="modal__header">
           <span className="modal__title">Дадаць Імшу</span>
           <button className="modal__header-close" onClick={() => onClose()}>
-            <CloseIcon className="icon"/>
+            <CloseIcon className="modal__header-closeIcon"/>
           </button>
         </header>
 
@@ -119,13 +171,13 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
           <section className="form">
             <section className="form__row form__row--column">
               <div className="form__col form__col--large">
-                <div className="form__label">Дата*</div>
+                <div className={`form__label ${!startDateValid && submitted ? 'form__label--invalid' : ''}`}>Дата</div>
                 <div className="form__field">
-                  <DateTimePicker onChange={handleChangeStartDate} selected={startDate}/>
+                  <DateTimePicker selected={startDate} onChange={handleChangeStartDate} />
                 </div>
               </div>
               <div className="form__col form__col--small">
-                <div className={`form__label ${!timeValid && submitted ? 'form__label--invalid' : ''}`}>Час*</div>
+                <div className={`form__label ${!timeValid && submitted ? 'form__label--invalid' : ''}`}>Час</div>
                 <div className="from__field">
                   <input type="text" onChange={handleChangeTime} value={time} placeholder="18:00"/>
                 </div>
@@ -135,7 +187,7 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
 
             <section className="form__row">
               <div className="form__col">
-                <div className="form__label">Мова*</div>
+                <div className="form__label">Мова</div>
                 <div className="form__field">
                   <select onChange={(e) => setLangCode(e.target.value)}>
                     <option value="беларуская">беларуская</option>
@@ -146,21 +198,23 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
               </div>
             </section>
 
-            <section className="form__row">
+            <section className="form__row form__row--no-margin">
               <div className="form__col">
-                <label className="form__label">Каментарый</label>
+                <label className="form__label">Каментарый (неабавязковае поле)</label>
                 <div className="form__field">
-                  <textarea rows="2" value={notes} onChange={(e) => setNotes(e.target.value)}/>
+                  <textarea rows={2} value={notes} onChange={handleChangeNotes}
+                  />
+                  <span className="form__hint form__hint--right">Засталося {NOTES_LIMIT - notes.length} знакаў</span>
                 </div>
               </div>
             </section>
 
-            <section className="form__row">
+            <section className="form__row form__row--small-margin">
               <div className="form__col">
                 <div className="form__field">
-                  <label className="form__label checkbox">
+                  <label className="checkbox">
                     <input type="checkbox" className="checkbox__input" checked={isMassPeriodic} onChange={() => setMassPeriodic(!isMassPeriodic)}/>
-                    <span className="checkbox__text">Паўтараць Імшу ?</span>
+                    <span className="checkbox__text">Паўтараць Імшу</span>
                   </label>
                 </div>
               </div>
@@ -168,9 +222,9 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
 
             {
               isMassPeriodic && <>
-                <section className="form__row">
+                <section className="form__row form__row--small-margin">
                   <div className="form__col">
-                    <div className={`form__label ${!daysValid && submitted ? 'form__label--invalid' : ''}`}>Дні*</div>
+                    <div className={`form__label ${!daysValid && submitted ? 'form__label--invalid' : ''}`}>Дні</div>
                     <div className="form__field">
                       <div className="days">
                         <ul className="days__list">
@@ -202,27 +256,36 @@ const CreateModal = ({ visible, onClose, onSave }: IProps) => {
                 </section>
                 <section className="form__row">
                   <div className="form__col">
-                    <div className="form__label">Скончыць</div>
+                    <div className="form__label form__label--no-margin">Скончыць (неабавязковае поле)</div>
+                    <span className="form__hint">Калі тэрмін дзеяння невядомы — пакіньце поле пустым</span>
                     <div className="form__field">
-                      <DateTimePicker onChange={handleChangeEndDate} selected={endDate}/>
+                      <DateTimePicker selected={endDate} onChange={handleChangeEndDate} />
                     </div>
                   </div>
                 </section>
               </>
             }
 
-            <section className="form__row">
+            <section className="form__row form__row--small-margin">
               <div className="form__col">
-                <span className="form__noticed">* — Поле, абавязковае для запаўнення</span>
+                <div className="form__field">
+                  <label className="checkbox">
+                    <input type="checkbox" className="checkbox__input" checked={online} onChange={() => setOnline(!online)}/>
+                    <span className="checkbox__text"> Відэа трансляцыя <YoutubeIcon className="checkbox__youtube"/></span>
+                  </label>
+                  <span className="form__hint form__hint--padding-left">Спасылка на трансляцыю ў раздзеле «Парафія»</span>
+                </div>
               </div>
             </section>
+
+
           </section>
 
         </section>
 
         <footer className="modal__footer">
-          <button className="btn btn--empty" onClick={() => onClose()}>Адмена</button>
-          <button className="btn" onClick={handleCreate}>Дадаць</button>
+          <button className="btn btn-empty" onClick={() => onClose()}>Адмена</button>
+          <button className="btn" onClick={handleCreate}>Дадаць Імшу</button>
         </footer>
       </section>
     </Modal>

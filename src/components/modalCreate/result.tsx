@@ -1,54 +1,51 @@
 import React, { useEffect, useState } from 'react';
-//import { fromUnixTime, format, parse } from 'date-fns';
 import fromUnixTime from 'date-fns/fromUnixTime';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 import be from 'date-fns/locale/be';
-
+import {YoutubeIcon, InfinityIcon} from "../icons";
 import { IMassCreate } from "../../api/interfeces";
-
 import Repeat from "../repeat";
-import InfinityIcon from '/assets/images/infinity.svg';
 import Modal from "../modal";
-
 import './style.scss';
-
 
 interface IProps {
   visible: boolean;
-  mass: IMassCreate;
-  onClose: (boolean) => void;
+  mass: IMassCreate | null;
+  onClose: () => void;
 }
 
 const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
   const [title, setTitle] = useState<string>('');
-  const [startDate, setStartDate] = useState<string>('');
+  const [startDate, setStartDate] = useState<Date>(new Date());
   const [period, setPeriod] = useState<string>('');
 
   useEffect(() => {
     if(!mass) return;
 
-    if (!mass.days) {
+
+    if (!mass.days && mass.singleStartTimestamp) {
       const startDate = fromUnixTime(mass.singleStartTimestamp);
-      setTitle(`Імша ${format(startDate, 'dd.MM.yyyy')} дададзена!`);
-      setStartDate(format(startDate, 'dd MMMM yyyy, eeeeee', {locale: be}));
+      setStartDate(startDate);
+      setTitle(`Адзінкавая Імша ${format(startDate, 'dd.MM.yyyy')} дададзена!`);
       setPeriod('адзінкавая');
     }else {
-      setTitle('Сталая Імша дададзена!');
-      const date = parse(mass.startDate, 'MM/dd/yyyy', new Date());
-      setStartDate(format(date, 'dd MMMM yyyy, eeeeee', {locale: be}));
-
+      if (mass.startDate) {
+        const startDate = parse(mass.startDate, 'MM/dd/yyyy', new Date());
+        setStartDate(startDate);
+        setTitle('Сталая Імша дададзена!');
+      }
       if (mass.startDate && mass.endDate) {
         const endDate = parse(mass.endDate, 'MM/dd/yyyy', new Date());
-        setPeriod(`${format(date, 'dd MMMM yyyy', {locale: be})} - ${format(endDate, 'dd MMMM yyyy', {locale: be})}`);
+        setPeriod(`${format(startDate, 'dd MMMM yyyy', {locale: be})} - ${format(endDate, 'dd MMMM yyyy', {locale: be})}`);
       }
     }
   }, [mass])
 
   if(!mass) return <></>
   return <>
-    <Modal visible={visible}>
-      <section className="modal">
+    <Modal visible={visible} onClose={() => onClose()}>
+      <section className="modal__section">
         <header className="modal__header">
           <span className="modal__title">{title}</span>
         </header>
@@ -58,7 +55,14 @@ const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
             <ul className="success__list">
               <li className="success__item">
                 <div className="success__title">Дата</div>
-                <div className="success__value">{startDate}</div>
+                <div className="success__value">{format(startDate, 'dd MMMM yyyy, eeeeee', {locale: be})}</div>
+              </li>
+              <li className="success__item">
+                <div className="success__title">Час</div>
+                <div className="success__value">
+                  {format(startDate, 'hh.mm')}
+                  {mass.online && <YoutubeIcon className="success__youtube"/>}
+                </div>
               </li>
               <li className="success__item">
                 <div className="success__title">Мова</div>
@@ -72,7 +76,7 @@ const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
                 <div className="success__title">Тэрмін дзеяння</div>
                 <div className="success__value">
                   {
-                    period ? period : <InfinityIcon />
+                    period ? period : <InfinityIcon className="success__infinity"/>
                   }
                 </div>
               </li>
@@ -91,7 +95,7 @@ const CreateModalResult = ({ mass, visible, onClose }: IProps) => {
         </section>
 
         <footer className="modal__footer modal__footer--center">
-          <button className="btn" onClick={onClose}>Ok</button>
+          <button className="btn btn-small" onClick={onClose}>Ok</button>
         </footer>
       </section>
     </Modal>

@@ -1,0 +1,26 @@
+@import "./src/styles/_mixin";
+
+.snackbar {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    background: var(--main-text-color);
+    padding: 10px 30px;
+    border-radius: 30px;
+  }
+  &__text {
+    text-transform: uppercase;
+    color: var(--main-button-text-color);
+    @include font(18px, false, 24px);
+    margin-right: 30px;
+  }
+  &__close {
+    cursor: pointer;
+  }
+  &__icon path {
+    fill: var(--main-button-text-color);
+  }
+}

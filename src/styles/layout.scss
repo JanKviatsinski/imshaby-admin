@@ -1,0 +1,17 @@
+@import "_mixin";
+
+body {
+  @include font();
+  color: var(--main-text-color);
+  background-color: var(--main-background);
+  &.fixed {
+    overflow: hidden;
+  }
+}
+.container {
+  width: 1200px;
+  margin: 0 auto;
+  @include tablet {
+    width: 736px;
+  }
+}

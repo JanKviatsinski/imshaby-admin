@@ -1,0 +1,149 @@
+@import "./src/styles/_mixin";
+
+.timetable {
+  td {
+    padding: 15px;
+    @include tablet {
+      padding: 8px;
+    }
+  }
+  &__header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 0 10px 5px;
+    background: var(--main-button-text-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  &__head {
+    @include font(0.875rem, true);
+    width: 100%;
+  }
+  &__body {
+    @include font(13px, false);
+    width: 100%;
+    @include tablet {
+      @include font(12px, false);
+    }
+  }
+  &__date {
+    vertical-align: top;
+    width: 160px;
+    padding-left: 0 !important;
+  }
+  &__online {
+    width: 45px;
+  }
+  &__time {
+    width: 85px;
+    text-align: left;
+  }
+  &__lang {
+    width: 125px;
+  }
+  &__comments {
+    /*width: 470px;*/
+  }
+  &__period {
+    width: 150px;
+    text-align: right;
+  }
+  &__repeat {
+    width: 180px;
+  }
+  &__icon path{
+    fill: var(--main-text-color);
+  }
+  &__btn {
+    width: 75px;
+    text-align: right;
+    position: relative;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  &__btnIcon {
+    cursor: pointer;
+    path {
+      fill: var(--second-text-color);
+    }
+    &:hover path{
+      fill: var(--hover-btn-background);
+    }
+    &:active path{
+      fill: var(--active-btn-background);
+    }
+    &--open path, &--open:hover path {
+      fill: var(--active-btn-background);
+    }
+  }
+
+  &__main {
+    /*padding: 15px 10px;*/
+  }
+  &__section {
+    padding: 0 10px;
+    border-top: 1px solid rgba(0, 0, 0, 0.3);
+    &:first-child {
+      border-top-color: transparent;
+    }
+  }
+  &__week {}
+  &__weekday {
+    text-transform: capitalize;
+  }
+  &__day {}
+
+  &__list {
+
+  }
+  &__line {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    &:first-child {
+      border-bottom-color: transparent;
+      @include tablet {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    }
+    &:last-child {
+      border-bottom-color: transparent;
+    }
+    &--selected {
+      background: var(--main-background);
+    }
+  }
+
+  &__youtube {
+    min-width: 20px;
+  }
+
+  &__actions {
+    display: flex;
+  }
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  &__item {
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    position: relative;
+    padding: 14px 0 0;
+    //width: 10%;
+    &--selected {
+      border-color: var(--active-btn-background);
+    }
+  }
+  &__date {
+    @include font(15px, true, 21px);
+    text-transform: uppercase;
+    text-align: center;
+  }
+  &__today {
+    @include font(12px, false, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}

@@ -1,11 +1,13 @@
-@import "/src/styles/_variable";
+@import "./src/styles/_mixin";
 
 .repeat {
   &__item {
-    @include font(0.8125rem, false, 1);
+    @include font(13px, false, 1);
     padding: 0 2px;
     color: var(--second-color);
-
+    @include tablet {
+      @include font(12px, false, 1);
+    }
     &--active {
       color: var(--main-color);
       text-decoration: underline;
