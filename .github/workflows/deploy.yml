@@ -26,7 +26,7 @@ jobs:
             - name: Use NodeJS v.12
               uses: actions/setup-node@v1
               with:
-                  node-version: '12.x'
+                  node-version: '15.x'
 
             - name: NPM install and build
               run: npm ci && npm run build
