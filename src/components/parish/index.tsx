@@ -4,30 +4,29 @@ import { useToasts } from "react-toast-notifications";
 
 import { IParish } from "../../api/interfeces";
 import LimitTimer from "../limitTimer";
-import {approveSchedule} from "../../api";
+
 import './style.scss';
+import { useStore } from 'effector-react';
+import { $parish } from '../../models/parish';
+import Loading from "../../components/loading";
+import { approveSchedule } from '../../models/schedule';
 
 interface props {
-  parish: IParish;
-  onApprove: () => void;
+
 }
 
-const Parish = ({ parish, onApprove } : props) => {
-  const { getAccessTokenSilently } = useAuth0();
+const Parish = ({  } : props) => {
+  const parish = useStore($parish);
   const { addToast } = useToasts();
 
 
 
   const handleApprove = async () => {
-    if(!parish?.id) {
-      return;
-    }
-    const token = await getAccessTokenSilently();
-    const approve = await approveSchedule(token, parish.id);
+    approveSchedule();
     addToast('Рассклад пацверджаны');
-    onApprove();
   }
 
+  if (!parish) return <Loading />
   return (
     <section className="parish">
       <aside className="parish__photo">

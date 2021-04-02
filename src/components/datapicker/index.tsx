@@ -1,5 +1,5 @@
 import React, {SyntheticEvent} from 'react';
-import DatePicker from 'react-datepicker';
+import DatePicker, { ReactDatePickerProps } from 'react-datepicker';
 import be from 'date-fns/locale/be';
 
 import './stylesheets/datepicker.scss';
@@ -7,11 +7,14 @@ import './stylesheets/datepicker.scss';
 interface IProps {
   onChange: (date: Date | null) => void;
   selected: Date | null;
+  minDate?: Date | null,
+  maxDate?: Date | null,
 }
 
-const DateTimePicker = ({onChange, selected}: IProps) => {
+const DateTimePicker = ({onChange, selected, minDate, maxDate}: IProps) => {
 
   const handleChange = (date: Date | [Date, Date] | null, e: SyntheticEvent) => {
+    console.log('handleChangehandleChangehandleChangehandleChange');
     e.stopPropagation();
     if (Array.isArray(date)) {
       return;
@@ -25,6 +28,8 @@ const DateTimePicker = ({onChange, selected}: IProps) => {
       dateFormat="dd/MM/yyyy"
       selected={selected}
       onChange={handleChange}
+      minDate={minDate}
+      maxDate={maxDate}
     />
   </>
 };

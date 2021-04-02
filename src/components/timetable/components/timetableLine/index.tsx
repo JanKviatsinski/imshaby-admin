@@ -8,29 +8,30 @@ import {
 import useClickOutside from "../../../../utils/useClickOutside";
 import CreateModal from "../../../modalCreate";
 import DeleteModal from "../../../modalDelete";
+import { editMass } from '../../../../models/mass';
 
 interface props {
   massHours: IMassHours;
   onDelete: (item: IMassHoursData) => void;
-  onEdit: (id: string) => void;
 }
 
-const TimeTableLine = ({ massHours, onDelete, onEdit }: props) => {
+const TimeTableLine = ({ massHours, onDelete }: props) => {
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>, item: IMassHoursData) => {
     e.stopPropagation();
+    console.log(item);
     onDelete(item);
   }
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>, item: IMassHoursData) => {
     e.stopPropagation();
-    onEdit(item.id);
+    editMass(item.id);
   }
 
   return <React.Fragment>
     {
       massHours.data.map((item, i) => (
-        <tr className="timetable__line" key={i}>
-          <td className="timetable__online">
+        <tr className="timetable__line" key={i} >
+          <td className={`timetable__online ${item.needUpdate ? 'timetable__needUpdate' : 'timetable__updated'}`}>
             {item.online && <YoutubeIcon className="timetable__icon"/>}
           </td>
           <td className="timetable__time">{massHours.hour}</td>

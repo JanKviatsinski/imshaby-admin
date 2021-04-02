@@ -20,11 +20,15 @@ export const getWeekSchedule = async (token: string, id: string, date: string): 
   return Promise.resolve(weekSchedule);
 };
 
+
+
 export const createMass = async (token: string, data: IMassCreate) => {
   const mass = await request(BASE_URL + 'mass', token,'POST', data);
   return Promise.resolve(mass);
 
 };
+
+
 
 export const deleteMass = async (token: string, id: string, period: IPeriod) => {
   const url = new URLSearchParams();
@@ -37,9 +41,9 @@ export const deleteMass = async (token: string, id: string, period: IPeriod) => 
   return await request(BASE_URL + `mass/${id}?` + url, token,'DELETE')
 };
 
-export const approveSchedule = async (token: string, parishId: string): Promise<any> => {
-  return await request(BASE_URL + `mass?parishId=${parishId}`, token,'PUT')
-};
+// export const approveSchedule = async (token: string, parishId: string): Promise<any> => {
+//   return await request(BASE_URL + `mass?parishId=${parishId}`, token,'PUT')
+// };
 
 export const getMassById = async (token: string, massId: string): Promise<any> => {
   return await request(BASE_URL + `mass/${massId}`, token,'GET')

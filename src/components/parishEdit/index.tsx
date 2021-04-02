@@ -5,50 +5,47 @@ import './style.scss';
 import {updateParishInfo} from "../../api";
 import { useAuth0 } from "@auth0/auth0-react";
 import {EmailIcon, LinkIcon, MarkerIcon, PhoneIcon} from "../icons";
+import { useStore } from 'effector-react';
+import { $parish, updateParish } from '../../models/parish';
 
 interface props {
-  parish: IParish;
 }
 
-const ParishEdit = ({ parish } : props) => {
-  const { getAccessTokenSilently } = useAuth0();
-  const [phone, setPhone] = useState(parish.phone || '');
-  const [website, setWebsite] = useState(parish.website || '');
-  const [email, setEmail] = useState(parish.email || '');
-  const [broadcastUrl, setBroadcastUrl] = useState(parish.broadcastUrl || '');
+const ParishEdit = ({  } : props) => {
+  const parish = useStore($parish);
+  const [phone, setPhone] = useState(parish?.phone || '');
+  const [website, setWebsite] = useState(parish?.website || '');
+  const [email, setEmail] = useState(parish?.email || '');
+  const [broadcastUrl, setBroadcastUrl] = useState(parish?.broadcastUrl || '');
   const [editMode, setEditMode] = useState(false);
 
-  const saveParish = async () => {
+  const handleEdit = () => {
+    if (!parish) return;
+    if (!editMode) {
+      setEditMode(true);
+      return;
+    }
+
     const data: IParish = {
       ...parish,
       phone,
       website,
       email,
       broadcastUrl,
-    }
-    const token = await getAccessTokenSilently();
-    const res = await updateParishInfo(token, data.id, data)
-    console.log(res);
-  }
-
-  const handleEdit = () => {
-    if (!editMode) {
-      setEditMode(true);
-      return;
-    }
-    saveParish();
+    };
+    updateParish(data);
     setEditMode(false);
   };
   const handleCloseEdit = () => {
-    setPhone(parish.phone || '');
-    setWebsite(parish.website || '');
-    setEmail(parish.email || '');
-    setBroadcastUrl(parish.broadcastUrl || '');
+    setPhone(parish?.phone || '');
+    setWebsite(parish?.website || '');
+    setEmail(parish?.email || '');
+    setBroadcastUrl(parish?.broadcastUrl || '');
     setEditMode(false);
   };
 
 
-
+  if (!parish) return <></>
   return (
     <section className="parishEdit">
       <aside className="parishEdit__photo">

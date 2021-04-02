@@ -33,6 +33,28 @@
   }
   &__online {
     width: 45px;
+    position: relative;
+  }
+  &__needUpdate, &__updated {
+    position: relative;
+  }
+  &__needUpdate:after,
+  &__updated:after {
+    content: '';
+    display: block;
+    height: 20px;
+    width: 3px;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+  }
+  &__needUpdate:after {
+    background: #FFEA00;
+  }
+  &__updated:after {
+    background: #21962D;
   }
   &__time {
     width: 85px;

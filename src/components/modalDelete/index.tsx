@@ -87,7 +87,7 @@ const DeleteModal = ({ visible, onClose, onSave, mass, date }: IProps) => {
           <section className="success">
             <ul className="success__list">
               {
-                !mass.days.length && <>
+                !mass.days?.length && <>
                   <li className="success__item">
                     <div className="success__title">Дата</div>
                     <div className="success__value">{format(date, 'dd MMMM yyyy, eeeeee', {locale: be})}</div>

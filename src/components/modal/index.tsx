@@ -16,7 +16,6 @@ const Modal = ({ visible, children, onClose }: IProps) => {
   })
 
   const handleClick = (e: MouseEvent) => {
-    console.log('handle click');
     if (!(nodeRef.current! as any).contains(e.target)) {
       console.log('close popup');
       onClose();
@@ -24,7 +23,6 @@ const Modal = ({ visible, children, onClose }: IProps) => {
   }
 
   useEffect(() => {
-    console.log('sssss');
     document.addEventListener('click', handleClick, false);
     return document.removeEventListener('click', handleClick, false)
   }, []);

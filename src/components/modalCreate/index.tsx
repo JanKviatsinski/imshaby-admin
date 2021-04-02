@@ -1,30 +1,30 @@
-import React, {useState, useEffect, ChangeEvent} from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 import format from 'date-fns/format';
 import getTime from 'date-fns/getTime';
 import setHours from 'date-fns/setHours';
 import setMinutes from 'date-fns/setMinutes';
-import {CloseIcon, YoutubeIcon} from "../icons";
+import { CloseIcon, YoutubeIcon } from '../icons';
 
 
-import {IMassCreate} from "../../api/interfeces";
-import Modal from "../modal";
-import DateTimePicker from "../datapicker";
-import fromUnixTime from "date-fns/fromUnixTime";
-import parse from "date-fns/parse";
+import { IMassCreate } from '../../api/interfeces';
+import Modal from '../modal';
+import DateTimePicker from '../datapicker';
+import fromUnixTime from 'date-fns/fromUnixTime';
+import parse from 'date-fns/parse';
+import { useStore } from 'effector-react';
+import { $mass, $massMode, $massUpdated, resetMassMode, saveMass, updateMassStore } from '../../models/mass';
+import { MassMode } from '../../models/mass/types';
 
 interface IProps {
-  visible: boolean;
-  onClose: Function;
-  onSave: Function;
-  mass: IMassCreate | null;
+
 }
 
 const TIME_REGEXP = '^([01]\\d|2[0-3]):([0-5]\\d\\b)';
 const NOTES_LIMIT = 300;
 const DEFAULT_LANG = 'беларуская'
 
-const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
+const CreateModal = ({  }: IProps) => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [time, setTime] = useState<string>('');
@@ -37,6 +37,15 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
   const [langCode, setLangCode] = useState<string>(DEFAULT_LANG);
   const [notes, setNotes] = useState<string>('');
   const [submitted, setSubmitted] = useState<boolean>(false);
+
+  const mass = useStore($mass);
+  const massMode = useStore($massMode);
+  const massUpdated = useStore($massUpdated)
+  const visible = massMode !== MassMode.HIDDEN && !massUpdated;
+
+  useEffect(() => {
+    setSubmitted(false);
+  }, [visible])
 
   useEffect(() => {
     if (!mass) {
@@ -58,7 +67,7 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
     setDays(mass.days ? mass.days : []);
     setMassPeriodic(!!mass.days?.length);
     setOnline(!!mass.online);
-    setLangCode(mass.langCode);
+    setLangCode(mass.langCode || '');
     setNotes(mass.notes || '');
   }, [mass])
 
@@ -75,6 +84,7 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
     setOnline(false);
     setLangCode(DEFAULT_LANG);
     setNotes('');
+    setSubmitted(false);
   }
 
   const handleChangeStartDate = (date: Date | null) => {
@@ -130,8 +140,11 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
         notes,
         langCode,
         online,
+        id: mass?.id,
       };
-      onSave(data);
+
+      updateMassStore(data);
+      saveMass();
       return;
     }
 
@@ -142,6 +155,7 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
       notes,
       time,
       online,
+      id: mass?.id,
     };
 
     if (startDate) {
@@ -150,18 +164,22 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
     if (endDate) {
       data.endDate = format(endDate, 'MM/dd/yyyy');
     }
-
-    onSave(data);
+    updateMassStore(data)
+    saveMass();
     return;
   };
 
 
   return <>
-    <Modal visible={visible} onClose={() => onClose()}>
+    <Modal visible={visible} onClose={() => resetMassMode()}>
       <section className="modal__section">
         <header className="modal__header">
-          <span className="modal__title">Дадаць Імшу</span>
-          <button className="modal__header-close" onClick={() => onClose()}>
+          {
+            massMode === MassMode.CREATE
+            ? <span className="modal__title">Дадаць Імшу</span>
+            : <span className="modal__title">Змяніць Імшу</span>
+          }
+          <button className="modal__header-close" onClick={() => resetMassMode()}>
             <CloseIcon className="modal__header-closeIcon"/>
           </button>
         </header>
@@ -173,13 +191,13 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
               <div className="form__col form__col--large">
                 <div className={`form__label ${!startDateValid && submitted ? 'form__label--invalid' : ''}`}>Дата</div>
                 <div className="form__field">
-                  <DateTimePicker selected={startDate} onChange={handleChangeStartDate} />
+                  <DateTimePicker selected={startDate} onChange={handleChangeStartDate} minDate={new Date()} maxDate={endDate}/>
                 </div>
               </div>
               <div className="form__col form__col--small">
                 <div className={`form__label ${!timeValid && submitted ? 'form__label--invalid' : ''}`}>Час</div>
                 <div className="from__field">
-                  <input type="text" onChange={handleChangeTime} value={time} placeholder="18:00"/>
+                  <input type="text" onChange={handleChangeTime} value={time} placeholder="09:00"/>
                 </div>
               </div>
             </section>
@@ -259,7 +277,7 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
                     <div className="form__label form__label--no-margin">Скончыць (неабавязковае поле)</div>
                     <span className="form__hint">Калі тэрмін дзеяння невядомы — пакіньце поле пустым</span>
                     <div className="form__field">
-                      <DateTimePicker selected={endDate} onChange={handleChangeEndDate} />
+                      <DateTimePicker selected={endDate} onChange={handleChangeEndDate} minDate={startDate || new Date()} />
                     </div>
                   </div>
                 </section>
@@ -284,8 +302,13 @@ const CreateModal = ({ visible, onClose, onSave, mass }: IProps) => {
         </section>
 
         <footer className="modal__footer">
-          <button className="btn btn-empty" onClick={() => onClose()}>Адмена</button>
-          <button className="btn" onClick={handleCreate}>Дадаць Імшу</button>
+          <button className="btn btn-empty" onClick={() => resetMassMode()}>Адмена</button>
+          {
+            massMode === MassMode.CREATE
+            ? <button className="btn" onClick={handleCreate}>Дадаць Імшу</button>
+            : <button className="btn" onClick={handleCreate}>Змяніць Імшу</button>
+          }
+
         </footer>
       </section>
     </Modal>

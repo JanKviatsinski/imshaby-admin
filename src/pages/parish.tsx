@@ -9,37 +9,25 @@ import Section from "../components/section";
 import SectionHeader from "../components/sectionHeader";
 import {USER_PARISH_FIELD} from "../utils/constans";
 import {getParishById} from "../api";
-
+import { useGate, useStore } from 'effector-react';
+import { $parish, ParishGate } from '../models/parish';
+import { logout } from '../models/auth';
 
 const ParishPage = () => {
-  const { isLoading, user, getAccessTokenSilently, logout } = useAuth0();
-  const [parish, setParish] = useState<IParish | null>(null)
-  useEffect(() => {
+  const parish = useStore($parish)
+  useGate(ParishGate);
 
-    const parishId = user[USER_PARISH_FIELD];
-    fetchParish(parishId);
-  }, [user])
 
-  const fetchParish = async (id: string) => {
-    const token = await getAccessTokenSilently();
-    const parish = await getParishById(token, id);
-    setParish({...parish, id});
-  }
-
-  const handleLogout = () => {
-    logout();
-  }
-
-  if (isLoading || !user || !parish) return <Loading />;
+  if (!parish) return <Loading />;
   return <>
     <Header />
 
     <Section
       header={
-        <SectionHeader title={parish.name} action={true} callback={handleLogout} />
+        <SectionHeader title={parish.name} action={true} callback={logout} />
       }
       content={
-        <ParishEdit parish={parish}/>
+        <ParishEdit />
       }
     />
 

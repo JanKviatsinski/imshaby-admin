@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from 'react';
 import {IMassHours, IMassHoursData, IPeriod, ISchedule} from "../../api/interfeces";
 import { useMediaQuery } from "react-responsive";
 import format from "date-fns/format";
@@ -8,14 +8,17 @@ import TimeTableLine from "./components/timetableLine";
 import DeleteModal from "../modalDelete";
 import './style.scss';
 import {setHours, setMinutes} from "date-fns";
+import { Period } from '../../models/mass/types';
+import { $massDeleted, deleteMass } from '../../models/mass';
+import { useToasts } from 'react-toast-notifications';
+import { useStore } from 'effector-react';
 
 interface props {
   schedule: ISchedule[];
-  onDelete: (id: string, period: IPeriod, mass: IMassHoursData, date: Date) => void;
-  onEdit: (id: string) => void;
+  // onDelete: (id: string, period: IPeriod, mass: IMassHoursData, date: Date) => void;
 }
 
-const TimeTable = ({ schedule, onDelete, onEdit }: props) => {
+const TimeTable = ({ schedule }: props) => {
   const [selectedMass, setSelectedMass] = useState<IMassHoursData | null>(null);
   const [visibleDelete, setVisibleDelete] = useState<boolean>(false);
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
@@ -32,12 +35,45 @@ const TimeTable = ({ schedule, onDelete, onEdit }: props) => {
     setVisibleDelete(true);
   }
 
-  const handleDelete = (massId: string, period: IPeriod) => {
+  /* refactoring start */
+  const isDeletedMass = useStore($massDeleted);
+  const { addToast } = useToasts();
+  const [period, setPeriod] = useState<Period>();
+
+  const handleDelete = (mass_id: string, period: Period) => {
     if (!selectedMass) return;
-    onDelete(massId, period, selectedMass, selectedDay);
+
     setVisibleDelete(false);
+    setPeriod(period)
+
+    deleteMass({ mass_id, period });
   }
 
+  useEffect(() => {
+    console.log(isDeletedMass);
+    if (!selectedMass || !isDeletedMass) return;
+    console.log('showww');
+    addToast(toastHelper(selectedMass, period, selectedDay))
+  }, [isDeletedMass]);
+  /*refactoring end*/
+
+  const toastHelper = (mass: IMassHoursData, period: Period | undefined, date: Date): string => {
+    if (!mass.days?.length) {
+      return `Адзінкавая Імша ${format(date, 'dd.MM.yyyy, eeeeee', {locale: be} )}, ${mass.langCode}\n
+       выдалена з раскладу!`;
+    }
+    if (mass.days?.length && period?.from && period.to) {
+      const text = `Сталая Імша ${format(date, 'HH:mm, eeeeee', {locale: be} )}, ${mass.langCode}\n
+      выдалена з раскладу ${format(date, 'dd.MM.yyyy')}`;
+      return text
+    }
+    if (mass.days?.length && !period?.from && !period?.to) {
+      const text = `Сталая Імша ${format(date, 'HH:mm, eeeeee', {locale: be} )}, ${mass.langCode}\n
+      выдалена з раскладу цалкам`;
+      return text
+    }
+    return ''
+  }
 
   return <>
     <section className="timetable">
@@ -81,7 +117,6 @@ const TimeTable = ({ schedule, onDelete, onEdit }: props) => {
                           <TimeTableLine
                             massHours={massHours} key={k}
                             onDelete={(data) => handleDeleteModalOpen(data, day, massHours)}
-                            onEdit={onEdit}
                           />)
                       }
                       </tbody>
@@ -134,7 +169,6 @@ const TimeTable = ({ schedule, onDelete, onEdit }: props) => {
                     <TimeTableLine
                       massHours={massHours} key={k}
                       onDelete={(data) => handleDeleteModalOpen(data, schedule[tab], massHours)}
-                      onEdit={onEdit}
                     />)
                 }
 
