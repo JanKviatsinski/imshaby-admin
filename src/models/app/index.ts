@@ -13,13 +13,21 @@ export const $appInitialized = combine(
   (apiClient, auth0Client, token) => apiClient && auth0Client && token,
 );
 
-export let api: AxiosInstance | null = null;
-export const createApiClientFx = createEffect(async (token: string) => {
-  api = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    }
-  });
+
+export let api: AxiosInstance = axios.create();
+
+export const createApiClientFx = createEffect(async (token: string): Promise<boolean> => {
+  try {
+    api = axios.create({
+      baseURL: process.env.REACT_APP_API_URL,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    return true
+  }catch (e) {
+    console.error(e);
+    return false;
+  }
 });

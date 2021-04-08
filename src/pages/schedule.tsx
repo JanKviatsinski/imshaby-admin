@@ -13,10 +13,10 @@ import { logout } from '../models/auth';
 
 
 
-const MainPage = () => {
+const SchedulePage = () => {
   const parish = useStore($parish)
-  useGate(ParishGate);
 
+  useGate(ParishGate);
 
   if (!parish) return <Loading />
   return <>
@@ -42,4 +42,4 @@ const MainPage = () => {
   </>
 };
 
-export default MainPage;
+export default SchedulePage;

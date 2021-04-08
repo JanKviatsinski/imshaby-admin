@@ -1,15 +1,16 @@
 import { createStore, createEffect, createEvent } from 'effector';
 import createAuth0Client, { Auth0Client } from '@auth0/auth0-spa-js';
-import { Auth, AuthStatus } from './types';
+import { AuthStatus, User } from './types';
 import { USER_PARISH_FIELD } from '../../utils/constans';
+import { createGate } from 'effector-react';
 
 const { REACT_APP_AUTH_DOMAIN = '', REACT_APP_AUTH_CLIENT_ID = '', REACT_APP_AUTH_AUDIENCE = '' } = process.env;
 
+export const LoginGate = createGate();
+export const LogoutGate = createGate();
 
-export const $authStatus = createStore<AuthStatus>(AuthStatus.init);
-
-export const $auth = createStore<Auth>({
-  token: '',
+export const $token = createStore<string>('');
+export const $user = createStore<User>({
   parish_id: '',
 });
 
@@ -20,20 +21,25 @@ export const createAuthClientFx = createEffect(async () => {
     client = await createAuth0Client({
       domain: REACT_APP_AUTH_DOMAIN,
       client_id: REACT_APP_AUTH_CLIENT_ID ,
-      redirect_uri: window.location.origin,
+      redirect_uri: window.location.origin + '/login',
       audience: REACT_APP_AUTH_AUDIENCE,
-    });
+    }) as Auth0Client;
   }
-
   return client;
 });
 
-export const fetchTokenFx = createEffect(async () => {
+export const fetchTokenFx = createEffect( () => {
+  try {
+    return client?.getTokenSilently()
+  }catch (e) {
+    return new Error(e)
+  }
+})
+
+export const fetchUserFx = createEffect( async (): Promise<User> => {
   const user = await client?.getUser();
-  const token = await client?.getTokenSilently();
   return {
-   token,
-   parish_id: user ? user[USER_PARISH_FIELD] : ''
+    parish_id: user ? user[USER_PARISH_FIELD] : ''
   }
 })
 
@@ -43,19 +49,17 @@ export const isAuthenticatedFx = createEffect(async (): Promise<boolean> => {
 })
 
 export const loginWithRedirectFx = createEffect(async () => {
-  console.log('loginWithRedirectFx');
-  const client = await createAuthClientFx();
-  await client.loginWithRedirect({
-    redirect_uri: window.location.origin
-  });
-
-  const isAuthenticated = await client?.isAuthenticated();
-  console.log('=====');
-  console.log(isAuthenticated);
+  await client?.loginWithRedirect();
 })
 
 export const logoutFx = createEffect(async () => {
-  await client?.logout();
+  await client?.logout({
+    returnTo: window.location.origin
+  });
+})
+
+export const handleRedirectCallbackFx = createEffect(async () => {
+  await client?.handleRedirectCallback();
 })
 
 export const loginWithRedirect = createEvent();

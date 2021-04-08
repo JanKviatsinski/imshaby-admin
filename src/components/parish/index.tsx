@@ -1,24 +1,19 @@
 import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
 import { useToasts } from "react-toast-notifications";
 
-import { IParish } from "../../api/interfeces";
+
 import LimitTimer from "../limitTimer";
 
-import './style.scss';
 import { useStore } from 'effector-react';
 import { $parish } from '../../models/parish';
 import Loading from "../../components/loading";
 import { approveSchedule } from '../../models/schedule';
+import './style.scss';
+import { formatDate } from '../../utils/formatDate';
 
-interface props {
-
-}
-
-const Parish = ({  } : props) => {
+const Parish = () => {
   const parish = useStore($parish);
   const { addToast } = useToasts();
-
 
 
   const handleApprove = async () => {
@@ -35,7 +30,7 @@ const Parish = ({  } : props) => {
       <section className="parish__content">
         <div className="parishPeriod">
           <span className="parishPeriod__txt">Перыяд актуальнасці Імшаў</span>
-          <span className="parishPeriod__value">{`${parish.updatePeriodInDays} дзён`}</span>
+          <span className="parishPeriod__value">{formatDate(parish.updatePeriodInDays)}</span>
         </div>
         <div className="parishPeriod">
           <span className="parishPeriod__txt">Прайшло</span>

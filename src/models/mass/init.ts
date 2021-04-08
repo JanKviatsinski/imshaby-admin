@@ -14,7 +14,7 @@ import {
 } from './index';
 import { attach, forward, guard } from 'effector';
 import { MassMode } from './types';
-import { $auth } from '../auth';
+import { $user } from '../auth';
 import { $parish } from '../parish';
 
 $mass
@@ -39,20 +39,20 @@ $massDeleted
   .on(resetMassDeleted, () => false)
   .reset([deleteMass])
 
-
+// create mass
 guard({
   source: saveMass,
-  filter: $massMode.map((x) => x === MassMode.CREATE),
+  filter: $massMode.map((mode) => mode === MassMode.CREATE),
   target: attach({
     source: {
       mass: $mass,
-      auth: $auth,
+      user: $user,
       parish: $parish,
     },
     mapParams:  (params, data) => {
       return {
         ...data.mass,
-        parishId: data.auth.parish_id,
+        parishId: data.user.parish_id,
         cityId: data.parish?.cityId
       }
     },
@@ -60,20 +60,20 @@ guard({
   }),
 });
 
+// edit mass
 guard({
   source: saveMass,
   filter: $massMode.map((x) => x === MassMode.EDIT),
   target: attach({
     source: {
       mass: $mass,
-      auth: $auth,
+      user: $user,
       parish: $parish,
     },
     mapParams:  (params, data) => {
-      console.log(data.mass);
       return {
         ...data.mass,
-        parishId: data.auth.parish_id,
+        parishId: data.user.parish_id,
         cityId: data.parish?.cityId
       }
     },

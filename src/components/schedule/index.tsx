@@ -17,23 +17,17 @@ import parish from '../../pages/parish';
 import { MassMode } from '../../models/mass/types';
 
 const Schedule = () => {
-  const weekSchedule = useStore($schedule);
-  const [date, setDate] = useState<Date>(new Date());
   const [isCurrentWeek, setCurrentWeek] = useState<boolean>(false);
-
+  const weekSchedule = useStore($schedule);
 
   useEffect(() => {
     fetchWeekSchedule()
   }, []);
 
-
-
-
   useEffect(() => {
     if (!weekSchedule) return;
     setCurrentWeek(compareDesc(new Date(), weekSchedule.startWeekDate) < 0);
   }, [weekSchedule]);
-
 
   const handleChangeDate = (date: Date) => {
     updateScheduleDate(date)
@@ -46,11 +40,7 @@ const Schedule = () => {
     changeMassMode(MassMode.CREATE);
   }
 
-
-
-
   if (!weekSchedule) return <Loading />
-
   return <>
     <section className="schedule">
       <header className="schedule__header">

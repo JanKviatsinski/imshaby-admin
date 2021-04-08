@@ -8,7 +8,8 @@ import {
 import useClickOutside from "../../../../utils/useClickOutside";
 import CreateModal from "../../../modalCreate";
 import DeleteModal from "../../../modalDelete";
-import { editMass } from '../../../../models/mass';
+import { changeMassMode, editMass } from '../../../../models/mass';
+import { MassMode } from '../../../../models/mass/types';
 
 interface props {
   massHours: IMassHours;
@@ -19,11 +20,11 @@ const TimeTableLine = ({ massHours, onDelete }: props) => {
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>, item: IMassHoursData) => {
     e.stopPropagation();
-    console.log(item);
     onDelete(item);
   }
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>, item: IMassHoursData) => {
     e.stopPropagation();
+    changeMassMode(MassMode.EDIT);
     editMass(item.id);
   }
 

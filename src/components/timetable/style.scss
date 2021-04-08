@@ -6,6 +6,9 @@
     @include tablet {
       padding: 8px;
     }
+    @include mobile {
+      padding: 8px;
+    }
   }
   &__header {
     border-bottom: 1px solid rgba(0, 0, 0, 0.3);
@@ -30,51 +33,49 @@
     vertical-align: top;
     width: 160px;
     padding-left: 0 !important;
+    @include tablet {
+      width: 130px;
+    }
   }
   &__online {
     width: 45px;
     position: relative;
   }
-  &__needUpdate, &__updated {
-    position: relative;
-  }
-  &__needUpdate:after,
-  &__updated:after {
-    content: '';
-    display: block;
-    height: 20px;
-    width: 3px;
-    border-radius: 2px;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translate(50%, -50%);
-  }
-  &__needUpdate:after {
-    background: #FFEA00;
-  }
-  &__updated:after {
-    background: #21962D;
-  }
   &__time {
-    width: 85px;
+    width: 65px;
     text-align: left;
   }
   &__lang {
-    width: 125px;
+    width: 120px;
   }
   &__comments {
-    /*width: 470px;*/
+    width: 328px;
+    overflow: hidden;
+    @include tablet {
+      width: 170px;
+      max-width: 170px;
+    }
+    @include mobile {
+      width: 165px;
+      max-width: 165px;
+    }
   }
   &__period {
     width: 150px;
     text-align: right;
+    @include tablet {
+      width: 140px;
+    }
+    @include mobile {
+      width: 100px;
+    }
   }
   &__repeat {
-    width: 180px;
-  }
-  &__icon path{
-    fill: var(--main-text-color);
+    width: 175px;
+    @include mobile {
+      width: 105px;
+      max-width: 105px;
+    }
   }
   &__btn {
     width: 75px;
@@ -82,6 +83,9 @@
     position: relative;
     padding-left: 0 !important;
     padding-right: 0 !important;
+  }
+  &__icon path{
+    fill: var(--main-text-color);
   }
   &__btnIcon {
     cursor: pointer;
@@ -140,6 +144,27 @@
 
   &__actions {
     display: flex;
+  }
+  &__needUpdate, &__updated {
+    position: relative;
+  }
+  &__needUpdate:after,
+  &__updated:after {
+    content: '';
+    display: block;
+    height: 20px;
+    width: 3px;
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+  }
+  &__needUpdate:after {
+    background: #FFEA00;
+  }
+  &__updated:after {
+    background: #21962D;
   }
 }
 

@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { useStore } from 'effector-react';
 import { Route } from 'react-router-dom';
-import { $auth, $authStatus, loginWithRedirect } from '../models/auth';
-import { $appInitialized, $auth0ClientReady } from '../models/app';
+import { $user } from '../models/auth';
+import { $appInitialized } from '../models/app';
 import Loading from './loading';
-import { AuthStatus } from '../models/auth/types';
+
 
 interface IPrivateRoute {
   component: React.ComponentType,
@@ -13,21 +13,10 @@ interface IPrivateRoute {
 
 const ProtectedRoute = ({ component, ...args }: IPrivateRoute) => {
   const appInitialized = useStore($appInitialized);
-  const authClientInitialized = useStore($auth0ClientReady);
-  const { token } = useStore($auth);
-  const authStatus = useStore($authStatus);
+  const { parish_id } = useStore($user);
 
-  useEffect(() => {
-    console.log(authStatus);
-    debugger
-    if (authStatus === AuthStatus.failed) {
-      loginWithRedirect();
-    }
-  }, [authStatus]);
-
-
-  if (appInitialized) {
-    return <Route component={(component)} {...args} exact={true} />;
+  if (appInitialized && parish_id) {
+    return <Route component={(component)} {...args} exact />;
   } else {
     return <Loading />;
   }

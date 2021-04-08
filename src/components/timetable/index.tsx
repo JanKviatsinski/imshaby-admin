@@ -24,7 +24,7 @@ const TimeTable = ({ schedule }: props) => {
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
 
   const [tab, setTab] = useState<number>(0);
-  const isTablet = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTablet = useMediaQuery({ query: '(max-width: 812px)' })
 
   const handleDeleteModalOpen = (massHoursData: IMassHoursData, day: ISchedule, massHours: IMassHours) => {
     const [hour, minute] = massHours.hour.split(':');
@@ -50,9 +50,8 @@ const TimeTable = ({ schedule }: props) => {
   }
 
   useEffect(() => {
-    console.log(isDeletedMass);
     if (!selectedMass || !isDeletedMass) return;
-    console.log('showww');
+
     addToast(toastHelper(selectedMass, period, selectedDay))
   }, [isDeletedMass]);
   /*refactoring end*/
@@ -106,7 +105,7 @@ const TimeTable = ({ schedule }: props) => {
                   <section className="timetable__section" key={i}>
                     <table className="timetable__body">
                       <tbody>
-                      <tr className="timetable__line">
+                      <tr className="timetable__lineDate">
                         <td className="timetable__date" rowSpan={lineCount}>
                           <div className="timetable__weekday">{format(day.date, 'eeee', {locale: be})}</div>
                           <div className="timetable__day">{format(day.date, 'dd MMMM', {locale: be})}</div>

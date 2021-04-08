@@ -1,45 +1,40 @@
 import { forward } from 'effector';
 import {
-  $auth,
-  $authStatus,
-  createAuthClientFx,
-  fetchTokenFx,
-  isAuthenticatedFx,
+  $token, $user,
+  fetchTokenFx, fetchUserFx, handleRedirectCallbackFx,
+  LoginGate,
   loginWithRedirect,
   loginWithRedirectFx,
   logout,
-  logoutFx,
+  logoutFx, LogoutGate,
 } from './';
-import { AuthStatus } from './types';
 
-$auth
-  .on(fetchTokenFx.doneData, (state, { token, parish_id }) => ({ ...state, token, parish_id }));
+$user
+  .on(fetchUserFx.doneData, (state, { parish_id }) => ({ ...state, parish_id }));
 
-$authStatus
-  .on(isAuthenticatedFx.doneData, (state, payload) => payload ? AuthStatus.success : AuthStatus.failed)
-  .reset(logout);
+$token
+  .on(fetchTokenFx.doneData, (state, token) => token)
 
-forward({
-  from: loginWithRedirectFx.doneData,
-  to: isAuthenticatedFx,
-})
 
 forward({
-  from: createAuthClientFx.doneData,
-  to: [isAuthenticatedFx]
-});
-
-forward({
-  from: isAuthenticatedFx.doneData,
-  to: [fetchTokenFx]
-});
-
-forward({
-  from: loginWithRedirect,
+  from: [loginWithRedirect, fetchTokenFx.failData],
   to: [loginWithRedirectFx]
 });
 
 forward({
   from: logout,
-  to: [logoutFx]
+  to: logoutFx
 });
+
+forward({
+  from: LogoutGate.open,
+  to: logoutFx
+})
+
+
+forward({
+  from: LoginGate.open,
+  to: handleRedirectCallbackFx
+})
+
+handleRedirectCallbackFx.watch((payload => window.location.replace('/')))
