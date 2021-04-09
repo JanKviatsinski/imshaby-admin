@@ -26,9 +26,9 @@ export type Parish = {
       href: string;
     }
   }
-}
+};
 
 type Localization = {
   name: string;
   address: string;
-}
+};

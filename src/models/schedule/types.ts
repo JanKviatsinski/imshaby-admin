@@ -1,18 +1,23 @@
-export type IWeekSchedule = {
+export type WeekSchedule = {
   startWeekDate: Date;
-  schedule: ISchedule[];
-}
+  schedule: Schedule[];
+};
 
-export type ISchedule = {
+export type Schedule = {
   date: Date;
-  massHours: IMassHours[];
-}
+  massHours: MassHours[];
+};
 
-export type IMassHours = {
+export type ScheduleResponse = {
+  date: string;
+  massHours: MassHours[];
+};
+
+export type MassHours = {
   hour: string;
-  data: IMassHoursData[];
-}
-export type IMassHoursData = {
+  data: MassHoursData[];
+};
+export type MassHoursData = {
   id: string;
   days: number[];
   startDate: string | null;
@@ -31,4 +36,4 @@ export type IMassHoursData = {
     needUpdate: boolean;
     parishId: string;
   }
-}
+};

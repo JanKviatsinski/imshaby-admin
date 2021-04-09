@@ -6,30 +6,29 @@ export type Mass = {
   days?: number[] | null;
   notes?: string;
   localizedInfo?: {
-    ru: ILocalization;
-    en: ILocalization;
-    pl: ILocalization;
+    ru: Localization;
+    en: Localization;
+    pl: Localization;
   },
   parishId?: string;
   startDate?: string;
   endDate?: string;
   singleStartTimestamp?: number;
   online?: boolean | null;
-}
+};
 
-
-type ILocalization = {
+type Localization = {
   name: string;
   address: string;
-}
+};
 
 export type Period = {
   from: string;
   to?: string;
-}
+};
 
 export enum MassMode {
   EDIT,
   CREATE,
   HIDDEN,
-}
+};

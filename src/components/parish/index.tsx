@@ -1,31 +1,30 @@
-import React from "react";
-import { useToasts } from "react-toast-notifications";
-
-
-import LimitTimer from "../limitTimer";
-
+import React from 'react';
 import { useStore } from 'effector-react';
-import { $parish } from '../../models/parish';
-import Loading from "../../components/loading";
-import { approveSchedule } from '../../models/schedule';
-import './style.scss';
+import { useToasts } from 'react-toast-notifications';
 import { formatDate } from '../../utils/formatDate';
 
-const Parish = () => {
+import { LimitTimer } from '../limitTimer';
+import Loading from '../loading';
+
+import { approveSchedule } from '../../models/schedule';
+import { $parish } from '../../models/parish';
+
+import './style.scss';
+
+export const Parish = () => {
   const parish = useStore($parish);
   const { addToast } = useToasts();
-
 
   const handleApprove = async () => {
     approveSchedule();
     addToast('Рассклад пацверджаны');
-  }
+  };
 
-  if (!parish) return <Loading />
+  if (!parish) return <Loading />;
   return (
     <section className="parish">
       <aside className="parish__photo">
-        <img src={`https://imsha.by/${parish.imgPath}`} alt={parish.name} className="parish__img"/>
+        <img src={`https://imsha.by/${parish.imgPath}`} alt={parish.name} className="parish__img" />
       </aside>
       <section className="parish__content">
         <div className="parishPeriod">
@@ -53,6 +52,4 @@ const Parish = () => {
       </section>
     </section>
   );
-}
-
-export default Parish;
+};

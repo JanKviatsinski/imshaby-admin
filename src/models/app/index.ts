@@ -13,7 +13,6 @@ export const $appInitialized = combine(
   (apiClient, auth0Client, token) => apiClient && auth0Client && token,
 );
 
-
 export let api: AxiosInstance = axios.create();
 
 export const createApiClientFx = createEffect(async (token: string): Promise<boolean> => {
@@ -22,11 +21,11 @@ export const createApiClientFx = createEffect(async (token: string): Promise<boo
       baseURL: process.env.REACT_APP_API_URL,
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
-    return true
-  }catch (e) {
+    return true;
+  } catch (e) {
     console.error(e);
     return false;
   }

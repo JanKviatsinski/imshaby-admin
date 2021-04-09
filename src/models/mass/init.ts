@@ -1,3 +1,4 @@
+import { attach, forward, guard } from 'effector';
 import {
   $mass, $massDeleted,
   $massMode,
@@ -12,7 +13,6 @@ import {
   updateMassFx,
   updateMassStore,
 } from './index';
-import { attach, forward, guard } from 'effector';
 import { MassMode } from './types';
 import { $user } from '../auth';
 import { $parish } from '../parish';
@@ -20,24 +20,23 @@ import { $parish } from '../parish';
 $mass
   .on(createMassFx.doneData, (state, payload) => payload)
   .on(getMassFx.doneData, (state, payload) => payload)
-  .on(updateMassStore, (state, payload) => payload ? payload : state)
-  .reset([resetMass])
+  .on(updateMassStore, (state, payload) => (payload || state))
+  .reset([resetMass]);
 
 $massMode
   .on(changeMassMode, (state, payload) => payload)
-  //.on(getMassFx.doneData, (state, payload) => MassMode.EDIT)
-  .reset([resetMassMode])
+  .reset([resetMassMode]);
 
 $massUpdated
   .on(createMassFx.doneData, () => true)
   .on(updateMassFx.doneData, () => true)
   .on(deleteMassFx.doneData, () => true)
-  .on(resetMassUpdated, () => false)
+  .on(resetMassUpdated, () => false);
 
 $massDeleted
   .on(deleteMassFx.doneData, () => true)
   .on(resetMassDeleted, () => false)
-  .reset([deleteMass])
+  .reset([deleteMass]);
 
 // create mass
 guard({
@@ -49,13 +48,11 @@ guard({
       user: $user,
       parish: $parish,
     },
-    mapParams:  (params, data) => {
-      return {
-        ...data.mass,
-        parishId: data.user.parish_id,
-        cityId: data.parish?.cityId
-      }
-    },
+    mapParams: (params, data) => ({
+      ...data.mass,
+      parishId: data.user.parish_id,
+      cityId: data.parish?.cityId,
+    }),
     effect: createMassFx,
   }),
 });
@@ -70,24 +67,21 @@ guard({
       user: $user,
       parish: $parish,
     },
-    mapParams:  (params, data) => {
-      return {
-        ...data.mass,
-        parishId: data.user.parish_id,
-        cityId: data.parish?.cityId
-      }
-    },
+    mapParams: (params, data) => ({
+      ...data.mass,
+      parishId: data.user.parish_id,
+      cityId: data.parish?.cityId,
+    }),
     effect: updateMassFx,
   }),
 });
 
 forward({
   from: editMass,
-  to: getMassFx
+  to: getMassFx,
 });
 
 forward({
   from: deleteMass,
-  to: deleteMassFx
-})
-
+  to: deleteMassFx,
+});

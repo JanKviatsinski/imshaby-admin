@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import differenceInSeconds from "date-fns/differenceInSeconds";
+import React, { useEffect, useState } from 'react';
+import differenceInSeconds from 'date-fns/differenceInSeconds';
 
 interface props {
   lastDate: Date;
@@ -14,7 +14,7 @@ interface IDisplayDuration {
   seconds: string | number;
 }
 
-const LimitTimer = ({ lastDate, limitDays, attentionClass } : props) => {
+export const LimitTimer = ({ lastDate, limitDays, attentionClass } : props) => {
   const [duration, setDuration] = useState<IDisplayDuration | null>(null);
   const [attention, setAttention] = useState(false);
 
@@ -32,21 +32,18 @@ const LimitTimer = ({ lastDate, limitDays, attentionClass } : props) => {
     const seconds = Math.floor(secondsBetween % 60);
 
     setDuration({
-      days: days > 9 ? days : '0' + days,
-      hours: hours > 9 ? hours : '0' + hours,
-      minutes: minutes > 9 ? minutes : '0' + minutes,
-      seconds: seconds > 9 ? seconds : '0' + seconds,
+      days: days > 9 ? days : `0${days}`,
+      hours: hours > 9 ? hours : `0${hours}`,
+      minutes: minutes > 9 ? minutes : `0${minutes}`,
+      seconds: seconds > 9 ? seconds : `0${seconds}`,
     });
     setAttention(days >= limitDays);
-  }
+  };
 
-
-  if (!duration) return <></>
+  if (!duration) return <></>;
   return (
     <span className={attention ? attentionClass : ''}>
       {`${duration?.days} : ${duration?.hours} : ${duration?.minutes} : ${duration?.seconds}`}
     </span>
   );
-}
-
-export default LimitTimer;
+};

@@ -7,34 +7,32 @@ import {
   loginWithRedirectFx,
   logout,
   logoutFx, LogoutGate,
-} from './';
+} from '.';
 
 $user
   .on(fetchUserFx.doneData, (state, { parish_id }) => ({ ...state, parish_id }));
 
 $token
-  .on(fetchTokenFx.doneData, (state, token) => token)
-
+  .on(fetchTokenFx.doneData, (state, token) => token);
 
 forward({
   from: [loginWithRedirect, fetchTokenFx.failData],
-  to: [loginWithRedirectFx]
+  to: [loginWithRedirectFx],
 });
 
 forward({
   from: logout,
-  to: logoutFx
+  to: logoutFx,
 });
 
 forward({
   from: LogoutGate.open,
-  to: logoutFx
-})
-
+  to: logoutFx,
+});
 
 forward({
   from: LoginGate.open,
-  to: handleRedirectCallbackFx
-})
+  to: handleRedirectCallbackFx,
+});
 
-handleRedirectCallbackFx.watch((payload => window.location.replace('/')))
+handleRedirectCallbackFx.watch(((payload) => window.location.replace('/')));

@@ -1,17 +1,15 @@
-import React, {useState} from "react";
-import { IParish } from "../../api/interfeces";
-
-import './style.scss';
-import {updateParishInfo} from "../../api";
-import { useAuth0 } from "@auth0/auth0-react";
-import {EmailIcon, LinkIcon, MarkerIcon, PhoneIcon} from "../icons";
+import React, { useState } from 'react';
 import { useStore } from 'effector-react';
+
+import { EmailIcon, LinkIcon, MarkerIcon, PhoneIcon } from '../icons';
+
+import { Parish } from '../../models/parish/types';
 import { $parish, updateParish } from '../../models/parish';
 
-interface props {
-}
+import './style.scss';
 
-const ParishEdit = ({  } : props) => {
+
+const ParishEdit = () => {
   const parish = useStore($parish);
   const [phone, setPhone] = useState(parish?.phone || '');
   const [website, setWebsite] = useState(parish?.website || '');
@@ -26,7 +24,7 @@ const ParishEdit = ({  } : props) => {
       return;
     }
 
-    const data: IParish = {
+    const data: Parish = {
       ...parish,
       phone,
       website,
@@ -44,14 +42,12 @@ const ParishEdit = ({  } : props) => {
     setEditMode(false);
   };
 
-
-  if (!parish) return <></>
+  if (!parish) return <></>;
   return (
     <section className="parishEdit">
       <aside className="parishEdit__photo">
-        <img src={`https://imsha.by/${parish.imgPath}`} alt={parish.name} className="parishEdit__img"/>
+        <img src={`https://imsha.by/${parish.imgPath}`} alt={parish.name} className="parishEdit__img" />
       </aside>
-
 
       <section className="parishEdit__content">
 
@@ -59,7 +55,9 @@ const ParishEdit = ({  } : props) => {
           <ul className="parishInfo__list">
             <li className="parishInfo__item">
               <div className="parishInfo__name">
-                <MarkerIcon className="parishInfo__icon"/> Адрас
+                <MarkerIcon className="parishInfo__icon" />
+                {' '}
+                Адрас
               </div>
               <div className="parishInfo__field">
                 <span className="parishInfo__address">{parish.address}</span>
@@ -67,39 +65,47 @@ const ParishEdit = ({  } : props) => {
             </li>
             <li className="parishInfo__item">
               <div className="parishInfo__name">
-                <PhoneIcon className="parishInfo__icon"/> Тэлефон
+                <PhoneIcon className="parishInfo__icon" />
+                {' '}
+                Тэлефон
               </div>
               <div className="parishInfo__field">
                 <span className="parishInfo__value">{phone}</span>
-                <input type="text" className="parishInfo__input" value={phone} onChange={(e) => setPhone(e.target.value)}/>
+                <input type="text" className="parishInfo__input" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
             </li>
             <li className="parishInfo__item">
               <div className="parishInfo__name">
-                <PhoneIcon className="parishInfo__icon"/> Вэбсайт
+                <PhoneIcon className="parishInfo__icon" />
+                {' '}
+                Вэбсайт
               </div>
               <div className="parishInfo__field">
                 <span className="parishInfo__value">{website}</span>
-                <input type="text" className="parishInfo__input" value={website} onChange={(e) => setWebsite(e.target.value)}/>
+                <input type="text" className="parishInfo__input" value={website} onChange={(e) => setWebsite(e.target.value)} />
               </div>
             </li>
             <li className="parishInfo__item">
               <div className="parishInfo__name">
-                <EmailIcon className="parishInfo__icon"/> Эл. пошта
+                <EmailIcon className="parishInfo__icon" />
+                {' '}
+                Эл. пошта
               </div>
               <div className="parishInfo__field">
                 <span className="parishInfo__value">{email}</span>
-                <input type="text" className="parishInfo__input" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                <input type="text" className="parishInfo__input" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </li>
 
             <li className="parishInfo__item">
               <div className="parishInfo__name">
-                <LinkIcon className="parishInfo__icon"/> Спасылка на айлайн-трансляцыю
+                <LinkIcon className="parishInfo__icon" />
+                {' '}
+                Спасылка на айлайн-трансляцыю
               </div>
               <div className="parishInfo__field">
                 <span className="parishInfo__value">{broadcastUrl}</span>
-                <input type="text" className="parishInfo__input" value={broadcastUrl} onChange={(e) => setBroadcastUrl(e.target.value)}/>
+                <input type="text" className="parishInfo__input" value={broadcastUrl} onChange={(e) => setBroadcastUrl(e.target.value)} />
               </div>
             </li>
           </ul>
@@ -114,6 +120,6 @@ const ParishEdit = ({  } : props) => {
       </section>
     </section>
   );
-}
+};
 
 export default ParishEdit;
