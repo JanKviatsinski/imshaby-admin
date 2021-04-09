@@ -11,7 +11,7 @@ import LogoutPage from './pages/logout';
 import SchedulePage from './pages/schedule';
 import ParishPage from './pages/parish';
 
-import { PrivateRoute } from './components/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute';
 import Snackbar from './components/snackbar';
 import Loading from './components/loading';
 

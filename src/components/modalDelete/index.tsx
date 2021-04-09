@@ -18,14 +18,14 @@ interface Props {
 }
 
 enum Radio {
-  one,
-  feature,
+  One,
+  Feature,
 }
 
 const DeleteModal = ({
   visible, onClose, onSave, mass, date,
 }: Props) => {
-  const [value, setValue] = useState<Radio>(Radio.one);
+  const [value, setValue] = useState<Radio>(Radio.One);
   const [title, setTitle] = useState<string>('');
   const [period, setPeriod] = useState<string>('');
 
@@ -60,11 +60,11 @@ const DeleteModal = ({
       to: '',
     };
     switch (value) {
-      case Radio.one:
+      case Radio.One:
         period.from = format(date, 'dd-MM-yyyy');
         period.to = format(date, 'dd-MM-yyyy');
         break;
-      case Radio.feature:
+      case Radio.Feature:
         period.from = '';
         period.to = '';
         break;
@@ -144,9 +144,9 @@ const DeleteModal = ({
                           type="radio"
                           className="radio__input"
                           name="delete"
-                          onChange={() => handleChange(Radio.one)}
-                          value={Radio.one}
-                          checked={value === Radio.one}
+                          onChange={() => handleChange(Radio.One)}
+                          value={Radio.One}
+                          checked={value === Radio.One}
                         />
                         <span className="radio__text">
                           толькі гэтую Імшу
@@ -162,9 +162,9 @@ const DeleteModal = ({
                           type="radio"
                           className="radio__input"
                           name="delete"
-                          onChange={() => handleChange(Radio.feature)}
-                          value={Radio.feature}
-                          checked={value === Radio.feature}
+                          onChange={() => handleChange(Radio.Feature)}
+                          value={Radio.Feature}
+                          checked={value === Radio.Feature}
                         />
                         <span className="radio__text">цалкам выдаліць сталую Імшу з раскладу на ўсе дні</span>
                       </label>

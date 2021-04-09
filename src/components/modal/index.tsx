@@ -1,4 +1,4 @@
-import React, { useEffect, ReactNode, useRef } from 'react';
+import React, { useEffect, ReactNode, useRef, MutableRefObject } from 'react';
 import { useOutsideClick } from '../../utils/useClickOutside';
 
 import './style.scss';
@@ -17,8 +17,8 @@ const Modal = ({ visible, children, onClose }: IProps) => {
   });
 
   const handleClick = (e: MouseEvent) => {
-    if (!(nodeRef.current! as any).contains(e.target)) {
-      console.log('close popup');
+    // @ts-ignore: Object is possibly 'null'
+    if (!(nodeRef.current).contains(e.target)) { // @ts-ignore: Object is possibly 'null'.
       onClose();
     }
   };
