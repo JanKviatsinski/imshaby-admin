@@ -18,7 +18,7 @@ const Modal = ({ visible, children, onClose }: IProps) => {
 
   const handleClick = (e: MouseEvent) => {
     // @ts-ignore: Object is possibly 'null'
-    if (!(nodeRef.current).contains(e.target)) { // @ts-ignore: Object is possibly 'null'.
+    if (!(nodeRef.current).contains(e.target)) {
       onClose();
     }
   };
