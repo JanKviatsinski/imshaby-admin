@@ -1,6 +1,7 @@
-import React, {useEffect, ReactNode, useRef} from 'react';
+import React, { useEffect, ReactNode, useRef } from 'react';
+import { useOutsideClick } from '../../utils/useClickOutside';
+
 import './style.scss';
-import useOutsideClick from "../../utils/useClickOutside";
 
 interface IProps {
   visible: boolean;
@@ -13,36 +14,34 @@ const Modal = ({ visible, children, onClose }: IProps) => {
 
   useOutsideClick(nodeRef, () => {
     onClose();
-  })
+  });
 
   const handleClick = (e: MouseEvent) => {
-    console.log('handle click');
     if (!(nodeRef.current! as any).contains(e.target)) {
       console.log('close popup');
       onClose();
     }
-  }
+  };
 
   useEffect(() => {
-    console.log('sssss');
     document.addEventListener('click', handleClick, false);
-    return document.removeEventListener('click', handleClick, false)
+    return document.removeEventListener('click', handleClick, false);
   }, []);
-
-
 
   useEffect(() => {
     document.querySelector('body')?.classList.toggle('fixed', visible);
   }, [visible]);
 
   if (!visible) return <></>;
-  return <>
-    <section className="modal-wrapper">
-      <section className="modal" ref={nodeRef}>
-        { children }
+  return (
+    <>
+      <section className="modal-wrapper">
+        <section className="modal" ref={nodeRef}>
+          { children }
+        </section>
       </section>
-    </section>
-  </>
+    </>
+  );
 };
 
-export default Modal
+export default Modal;

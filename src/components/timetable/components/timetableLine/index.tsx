@@ -1,37 +1,36 @@
-import React, {useRef, useState} from "react";
-import format from "date-fns/format";
-import {IMassHours, IMassHoursData, ISchedule} from "../../../../api/interfeces";
-import Repeat from "../../../repeat";
-import {
-  InfinityIcon, YoutubeIcon, DeleteIcon, EditIcon, PauseIcon, PointsIcon
-} from "../../../icons";
-import useClickOutside from "../../../../utils/useClickOutside";
-import CreateModal from "../../../modalCreate";
-import DeleteModal from "../../../modalDelete";
+import React from 'react';
+import format from 'date-fns/format';
+
+import Repeat from '../../../repeat';
+import { InfinityIcon, YoutubeIcon, DeleteIcon, EditIcon } from '../../../icons';
+
+import { changeMassMode, editMass } from '../../../../models/mass';
+import { MassMode } from '../../../../models/mass/types';
+import { MassHours, MassHoursData } from '../../../../models/schedule/types';
 
 interface props {
-  massHours: IMassHours;
-  onDelete: (item: IMassHoursData) => void;
-  onEdit: (id: string) => void;
+  massHours: MassHours;
+  onDelete: (item: MassHoursData) => void;
 }
 
-const TimeTableLine = ({ massHours, onDelete, onEdit }: props) => {
-
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>, item: IMassHoursData) => {
+const TimeTableLine = ({ massHours, onDelete }: props) => {
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>, item: MassHoursData) => {
     e.stopPropagation();
     onDelete(item);
-  }
-  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>, item: IMassHoursData) => {
+  };
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>, item: MassHoursData) => {
     e.stopPropagation();
-    onEdit(item.id);
-  }
+    changeMassMode(MassMode.EDIT);
+    editMass(item.id);
+  };
 
-  return <React.Fragment>
-    {
+  return (
+    <>
+      {
       massHours.data.map((item, i) => (
         <tr className="timetable__line" key={i}>
-          <td className="timetable__online">
-            {item.online && <YoutubeIcon className="timetable__icon"/>}
+          <td className={`timetable__online ${item.needUpdate ? 'timetable__needUpdate' : 'timetable__updated'}`}>
+            {item.online && <YoutubeIcon className="timetable__icon" />}
           </td>
           <td className="timetable__time">{massHours.hour}</td>
           <td className="timetable__lang">{item.langCode}</td>
@@ -39,22 +38,28 @@ const TimeTableLine = ({ massHours, onDelete, onEdit }: props) => {
           <td className="timetable__period">
             <div className="period">
               {
-                item.startDate && item.endDate && item.days && <>
+                item.startDate && item.endDate && item.days && (
+                <>
                   <span className="period__start">з </span>
                   <span className="period__date">{format(new Date(item.startDate), 'dd.MM.yyyy')}</span>
-                  <br/>
+                  <br />
                 </>
+                )
               }
               {
-                item.endDate && item.days && <>
+                item.endDate && item.days && (
+                <>
                   <span className="period__end">па </span>
                   <span className="period__date">{format(new Date(item.endDate), 'dd.MM.yyyy')}</span>
                 </>
+                )
               }
               {
-                !item.endDate && item.days && <>
+                !item.endDate && item.days && (
+                <>
                   <InfinityIcon className="timetable__icon" />
                 </>
+                )
               }
               {
                 !item.days && <span className="period__date">адзінкавая</span>
@@ -79,7 +84,8 @@ const TimeTableLine = ({ massHours, onDelete, onEdit }: props) => {
         </tr>
       ))
     }
-  </React.Fragment>;
-}
+    </>
+  );
+};
 
 export default TimeTableLine;

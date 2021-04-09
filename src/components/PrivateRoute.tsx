@@ -1,14 +1,21 @@
-import React  from 'react';
-import { Route } from "react-router-dom";
-import { withAuthenticationRequired } from "@auth0/auth0-react";
+import React from 'react';
+import { useStore } from 'effector-react';
+import { Route } from 'react-router-dom';
+import { $user } from '../models/auth';
+import { $appInitialized } from '../models/app';
+import Loading from './loading';
 
 interface IPrivateRoute {
   component: React.ComponentType,
   path: string;
 }
 
-const ProtectedRoute = ({ component, ...args }: IPrivateRoute) => (
-  <Route component={withAuthenticationRequired(component)} {...args} exact={true}/>
-);
+export const PrivateRoute = ({ component, ...args }: IPrivateRoute) => {
+  const appInitialized = useStore($appInitialized);
+  const { parish_id } = useStore($user);
 
-export default ProtectedRoute;
+  if (appInitialized && parish_id) {
+    return <Route component={(component)} {...args} exact />;
+  }
+  return <Loading />;
+};

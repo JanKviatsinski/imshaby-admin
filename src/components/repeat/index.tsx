@@ -1,12 +1,11 @@
 import React from 'react';
-import './style.scss'
+import './style.scss';
 
 interface IProps {
   week: number[];
 }
-const Repeat = ({week} : IProps) => {
-
-  return <>
+const Repeat = ({ week } : IProps) => (
+  <>
     <div className="repeat">
       <span className={`repeat__item ${week.includes(7) ? 'repeat__item--active' : ''}`}>Нд</span>
       <span className={`repeat__item ${week.includes(1) ? 'repeat__item--active' : ''}`}>Пн</span>
@@ -17,6 +16,6 @@ const Repeat = ({week} : IProps) => {
       <span className={`repeat__item ${week.includes(6) ? 'repeat__item--active' : ''}`}>Сб</span>
     </div>
   </>
-}
+);
 
 export default Repeat;

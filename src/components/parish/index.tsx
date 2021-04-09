@@ -1,42 +1,35 @@
-import React from "react";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useToasts } from "react-toast-notifications";
+import React from 'react';
+import { useStore } from 'effector-react';
+import { useToasts } from 'react-toast-notifications';
+import { formatDate } from '../../utils/formatDate';
 
-import { IParish } from "../../api/interfeces";
-import LimitTimer from "../limitTimer";
-import {approveSchedule} from "../../api";
+import { LimitTimer } from '../limitTimer';
+import Loading from '../loading';
+
+import { approveSchedule } from '../../models/schedule';
+import { $parish } from '../../models/parish';
+
 import './style.scss';
 
-interface props {
-  parish: IParish;
-  onApprove: () => void;
-}
-
-const Parish = ({ parish, onApprove } : props) => {
-  const { getAccessTokenSilently } = useAuth0();
+export const Parish = () => {
+  const parish = useStore($parish);
   const { addToast } = useToasts();
 
-
-
   const handleApprove = async () => {
-    if(!parish?.id) {
-      return;
-    }
-    const token = await getAccessTokenSilently();
-    const approve = await approveSchedule(token, parish.id);
+    approveSchedule();
     addToast('Рассклад пацверджаны');
-    onApprove();
-  }
+  };
 
+  if (!parish) return <Loading />;
   return (
     <section className="parish">
       <aside className="parish__photo">
-        <img src={`https://imsha.by/${parish.imgPath}`} alt={parish.name} className="parish__img"/>
+        <img src={`https://imsha.by/${parish.imgPath}`} alt={parish.name} className="parish__img" />
       </aside>
       <section className="parish__content">
         <div className="parishPeriod">
           <span className="parishPeriod__txt">Перыяд актуальнасці Імшаў</span>
-          <span className="parishPeriod__value">{`${parish.updatePeriodInDays} дзён`}</span>
+          <span className="parishPeriod__value">{formatDate(parish.updatePeriodInDays)}</span>
         </div>
         <div className="parishPeriod">
           <span className="parishPeriod__txt">Прайшло</span>
@@ -59,6 +52,4 @@ const Parish = ({ parish, onApprove } : props) => {
       </section>
     </section>
   );
-}
-
-export default Parish;
+};

@@ -1,6 +1,10 @@
 @import "./src/styles/_mixin";
 
 .repeat {
+  @include mobile {
+    display: flex;
+    flex-wrap: wrap;
+  }
   &__item {
     @include font(13px, false, 1);
     padding: 0 2px;
