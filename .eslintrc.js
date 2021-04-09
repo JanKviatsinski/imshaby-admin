@@ -1,3 +1,4 @@
+/*
 module.exports = {
   extends: ['airbnb-typescript'],
   parserOptions: {
@@ -21,4 +22,4 @@ module.exports = {
       },
     ],
   },
-};
+};*/

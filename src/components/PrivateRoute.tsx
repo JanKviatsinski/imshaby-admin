@@ -10,12 +10,14 @@ interface IPrivateRoute {
   path: string;
 }
 
-export const PrivateRoute = ({ component, ...args }: IPrivateRoute) => {
+const PrivateRoute = ({ component, path }: IPrivateRoute) => {
   const appInitialized = useStore($appInitialized);
   const { parish_id } = useStore($user);
 
   if (appInitialized && parish_id) {
-    return <Route component={(component)} {...args} exact />;
+    return <Route component={(component)} path={path} exact />;
   }
   return <Loading />;
 };
+
+export default PrivateRoute;
