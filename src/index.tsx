@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Route, Router, Switch } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Switch } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
 import { useGate, useStore } from 'effector-react';
 import reportWebVitals from './reportWebVitals';
-import history from './utils/history';
 
 import LoginPage from './pages/login';
 import LogoutPage from './pages/logout';
@@ -26,7 +25,7 @@ const App = () => {
 
   if (!appInitialized) return <Loading />;
   return (
-    <Router history={history}>
+    <Router>
       <Switch>
         <Route path="/login" component={LoginPage} />
         <Route path="/logout" component={LogoutPage} />
