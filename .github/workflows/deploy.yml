@@ -34,7 +34,7 @@ jobs:
             - name: NPM build
               run: CI='' npm run build
 
-            - name: List files
+            - name: List of files
               run: cd ./build && ls -la
 
             - name: Copy to server
