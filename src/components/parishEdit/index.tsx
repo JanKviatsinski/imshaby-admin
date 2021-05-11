@@ -70,7 +70,7 @@ const ParishEdit = () => {
                 Тэлефон
               </div>
               <div className="parishInfo__field">
-                <span className="parishInfo__value">{phone}</span>
+                <a href={`tel:${phone}`} className="parishInfo__value">{phone}</a>
                 <input type="text" className="parishInfo__input" value={phone} onChange={(e) => setPhone(e.target.value)} />
               </div>
             </li>
@@ -81,7 +81,7 @@ const ParishEdit = () => {
                 Вэбсайт
               </div>
               <div className="parishInfo__field">
-                <span className="parishInfo__value">{website}</span>
+                <a href={`${website}`} className="parishInfo__value" target="_blank">{website}</a>
                 <input type="text" className="parishInfo__input" value={website} onChange={(e) => setWebsite(e.target.value)} />
               </div>
             </li>
@@ -92,7 +92,7 @@ const ParishEdit = () => {
                 Эл. пошта
               </div>
               <div className="parishInfo__field">
-                <span className="parishInfo__value">{email}</span>
+                <a href={`mailto:${email}`} className="parishInfo__value">{email}</a>
                 <input type="text" className="parishInfo__input" value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </li>
@@ -101,10 +101,10 @@ const ParishEdit = () => {
               <div className="parishInfo__name">
                 <LinkIcon className="parishInfo__icon" />
                 {' '}
-                Спасылка на айлайн-трансляцыю
+                Спасылка на анлайн-трансляцыю
               </div>
               <div className="parishInfo__field">
-                <span className="parishInfo__value">{broadcastUrl}</span>
+                <a href={`${broadcastUrl}`} className="parishInfo__value" target="_blank">{broadcastUrl}</a>
                 <input type="text" className="parishInfo__input" value={broadcastUrl} onChange={(e) => setBroadcastUrl(e.target.value)} />
               </div>
             </li>

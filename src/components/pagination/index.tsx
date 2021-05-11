@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import format from 'date-fns/format';
 import subDays from 'date-fns/subDays';
 import addDays from 'date-fns/addDays';
 import be from 'date-fns/locale/be';
-import { endOfWeek } from 'date-fns';
+import { endOfWeek, startOfWeek } from 'date-fns';
 
 import { LeftArrowIcon, RightArrowIcon } from '../icons';
 import Loading from '../loading';
@@ -19,8 +19,16 @@ interface props {
 }
 
 const Pagination = ({ schedule, changeDate, isCurrentWeek }: props) => {
-  const handlePrevWeek = () => changeDate(subDays(schedule.startWeekDate, 7));
-  const handleNextWeek = () => changeDate(addDays(schedule.startWeekDate, 7));
+  const [startPeriod, setStartPeriod] = useState<Date>(new Date());
+  const [endPeriod, setEndPeriod] = useState<Date>(new Date());
+
+  useEffect(() => {
+    setStartPeriod(startOfWeek(schedule.startWeekDate, { weekStartsOn: 1 }));
+    setEndPeriod(endOfWeek(schedule.startWeekDate, { weekStartsOn: 1 }));
+  }, [schedule])
+
+  const handlePrevWeek = () => changeDate(subDays(startPeriod, 7));
+  const handleNextWeek = () => changeDate(addDays(endPeriod, 1));
 
   if (!schedule) return <Loading />;
   return (
@@ -38,23 +46,11 @@ const Pagination = ({ schedule, changeDate, isCurrentWeek }: props) => {
         !!schedule.schedule.length && (
         <>
           <span className="pagination__date">
-            {format(schedule.schedule[0].date, 'd')}
-            {' '}
-            -
-            {format(schedule.schedule[schedule.schedule.length - 1].date, 'dd MMMM', { locale: be })}
-          </span>
-        </>
-        )
-      }
-      {
-        !schedule.schedule.length && (
-        <>
-          <span className="pagination__date">
-            {format(new Date(), 'dd MMMM', { locale: be })}
+            {format(startPeriod, 'd')}
             {' '}
             -
             {' '}
-            {format(endOfWeek(new Date(), { weekStartsOn: 1 }), 'dd MMMM', { locale: be })}
+            {format(endPeriod, 'dd MMMM', { locale: be })}
           </span>
         </>
         )

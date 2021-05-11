@@ -149,8 +149,8 @@ const DeleteModal = ({
                           checked={value === Radio.One}
                         />
                         <span className="radio__text">
-                          толькі гэтую Імшу
-                          {format(date, 'dd.MM.yyyy')}
+                          {`толькі гэтую Імшу ${format(date, 'dd.MM.yyyy')}`}
+
                         </span>
                       </label>
                     </span>

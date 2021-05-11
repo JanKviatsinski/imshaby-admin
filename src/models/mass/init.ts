@@ -30,7 +30,6 @@ $massMode
 $massUpdated
   .on(createMassFx.doneData, () => true)
   .on(updateMassFx.doneData, () => true)
-  .on(deleteMassFx.doneData, () => true)
   .on(resetMassUpdated, () => false);
 
 $massDeleted
