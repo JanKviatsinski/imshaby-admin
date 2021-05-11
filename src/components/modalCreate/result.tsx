@@ -20,6 +20,7 @@ const CreateModalResult = () => {
   const [title, setTitle] = useState<string>('');
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [period, setPeriod] = useState<string>('');
+  const [time, setTime] = useState<string>(''); // todo should be remove when backend will fill mass.time for single mass
 
   const visible = useStore($massUpdated);
   const mass = useStore($mass);
@@ -32,13 +33,14 @@ const CreateModalResult = () => {
   useEffect(() => {
     if (!mass) return;
 
-    const textStatus = massMode === MassMode.CREATE ? 'дададзена' : 'адноўлена';
+    const textStatus = massMode === MassMode.CREATE ? 'дададзена' : 'зменена';
 
     if (!mass.days && mass.singleStartTimestamp) {
       const startDate = fromUnixTime(mass.singleStartTimestamp);
       setStartDate(startDate);
       setTitle(`Адзінкавая Імша ${format(startDate, 'dd.MM.yyyy')} ${textStatus}!`);
       setPeriod('адзінкавая');
+      setTime(format(fromUnixTime(mass.singleStartTimestamp), 'HH:mm'));
     } else {
       setTitle(`Сталая Імша ${textStatus}!`);
 
@@ -53,6 +55,7 @@ const CreateModalResult = () => {
         period += `па ${format(endDate, 'dd MMMM yyyy', { locale: be })}`;
       }
       setPeriod(period);
+      setTime(mass.time || '');
     }
   }, [mass]);
 
@@ -81,7 +84,7 @@ const CreateModalResult = () => {
                 <li className="success__item">
                   <div className="success__title">Час</div>
                   <div className="success__value">
-                    {mass.time}
+                    {time}
                     {mass.online && <YoutubeIcon className="success__youtube" />}
                   </div>
                 </li>

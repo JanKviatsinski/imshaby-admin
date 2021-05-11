@@ -13,7 +13,7 @@ const Header = () => (
       <section className="logo">
         <a href="https://imsha.by" className="link">
           <LogoIcon className="icon" />
-          <span>imsha.by</span>
+          <span className="logo__text">imsha.by</span>
         </a>
       </section>
 

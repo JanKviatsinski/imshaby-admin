@@ -175,18 +175,14 @@ const TimeTable = ({ schedule }: props) => {
 
 const toastHelper = (mass: MassHoursData, period: Period | undefined, date: Date): string => {
   if (!mass.days?.length) {
-    return `Адзінкавая Імша ${format(date, 'dd.MM.yyyy, eeeeee', { locale: be })}, ${mass.langCode}\n
-       выдалена з раскладу!`;
+    return `Адзінкавая Імша ${format(date, 'dd.MM.yyyy, eeeeee', { locale: be })}, ${mass.langCode}, выдалена з раскладу!`;
   }
   if (mass.days?.length && period?.from && period.to) {
-    const text = `Сталая Імша ${format(date, 'HH:mm, eeeeee', { locale: be })}, ${mass.langCode}\n
-      выдалена з раскладу ${format(date, 'dd.MM.yyyy')}`;
-    return text;
+    return `Сталая Імша ${format(date, 'HH:mm, eeeeee', { locale: be })}, ${mass.langCode}, выдалена з раскладу ${format(date, 'dd.MM.yyyy')}`;
+
   }
   if (mass.days?.length && !period?.from && !period?.to) {
-    const text = `Сталая Імша ${format(date, 'HH:mm, eeeeee', { locale: be })}, ${mass.langCode}\n
-      выдалена з раскладу цалкам`;
-    return text;
+    return `Сталая Імша ${format(date, 'HH:mm, eeeeee', { locale: be })}, ${mass.langCode}, выдалена з раскладу цалкам`;
   }
   return '';
 };

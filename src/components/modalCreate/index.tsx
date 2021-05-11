@@ -201,11 +201,11 @@ const CreateModal = () => {
                 <div className="form__col">
                   <div className="form__label">Мова</div>
                   <div className="form__field">
-                    <select onChange={(e) => setLangCode(e.target.value)}>
-                  <option value="беларуская">беларуская</option>
-                  <option value="польская">польская</option>
-                  <option value="англійская">англійская</option>
-                </select>
+                    <select onChange={(e) => setLangCode(e.target.value)} value={langCode}>
+                      <option value="беларуская">беларуская</option>
+                      <option value="польская">польская</option>
+                      <option value="англійская">англійская</option>
+                    </select>
                   </div>
                 </div>
               </section>
@@ -220,7 +220,7 @@ const CreateModal = () => {
                   onChange={handleChangeNotes}
                 />
                     <span className="form__hint form__hint--right">
-                  Засталося
+                  Засталося {' '}
                     {NOTES_LIMIT - notes.length}
                   {' '}
                   знакаў
@@ -249,12 +249,6 @@ const CreateModal = () => {
                     <div className="form__field">
                       <div className="days">
                         <ul className="days__list">
-                          <li
-                            className={`days__item ${days.includes(7) ? 'days__item--active' : ''}`}
-                            onClick={handleSelectDay(7)}
-                          >
-                            Нд
-                          </li>
                           <li
                             className={`days__item ${days.includes(1) ? 'days__item--active' : ''}`}
                             onClick={handleSelectDay(1)}
@@ -290,6 +284,12 @@ const CreateModal = () => {
                             onClick={handleSelectDay(6)}
                           >
                             Сб
+                          </li>
+                          <li
+                            className={`days__item ${days.includes(7) ? 'days__item--active' : ''}`}
+                            onClick={handleSelectDay(7)}
+                          >
+                            Нд
                           </li>
                         </ul>
                       </div>
