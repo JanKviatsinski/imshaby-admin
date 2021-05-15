@@ -44,7 +44,7 @@ const Schedule = () => {
       <section className="schedule">
         <header className="schedule__header">
           <div className="schedule__add">
-            <button className="btn" onClick={handleMassCreateOpen}>Дадаць Імшу</button>
+            <button className="schedule__btn btn" onClick={handleMassCreateOpen}>Дадаць Імшу</button>
           </div>
           <div className="schedule__pagination">
             <Pagination schedule={weekSchedule} changeDate={handleChangeDate} isCurrentWeek={isCurrentWeek} />

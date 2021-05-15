@@ -26,6 +26,7 @@ const TimeTable = ({ schedule }: props) => {
   const [visibleDelete, setVisibleDelete] = useState<boolean>(false);
   const [selectedDay, setSelectedDay] = useState<Date>(new Date());
   const [tab, setTab] = useState<number>(0);
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
   const isTablet = useMediaQuery({ query: '(max-width: 812px)' });
   const { addToast } = useToasts();
 
@@ -59,7 +60,7 @@ const TimeTable = ({ schedule }: props) => {
     <>
       <section className="timetable">
         {
-        !isTablet && (
+        !isTablet && ( // desktop
         <>
           <header className="timetable__header">
             <table className="timetable__head">
@@ -115,14 +116,14 @@ const TimeTable = ({ schedule }: props) => {
         )
       }
         {
-        isTablet && (
+          (isTablet && !isMobile) && (
         <>
           <ul className="tabs">
             {
               schedule.map((day: Schedule, i) => (
                 <li key={i} className={`tabs__item ${tab === i ? 'tabs__item--selected' : ''}`} onClick={() => setTab(i)}>
                   { isToday(day.date) && <div className="tabs__today">сёння</div> }
-                  <div className="tabs__date">{format(day.date, 'EEEE', { locale: be })}</div>
+                  <div className="tabs__weekDate">{format(day.date, 'EEEE', { locale: be })}</div>
                   <div className="tabs__date">{format(day.date, 'dd.MM', { locale: be })}</div>
                 </li>
               ))
@@ -161,11 +162,46 @@ const TimeTable = ({ schedule }: props) => {
                 </tbody>
               </table>
             </section>
-
           </section>
         </>
         )
       }
+
+        {
+          isMobile && (
+            <>
+              <ul className="tabs">
+                {
+                  schedule.map((day: Schedule, i) => (
+                    <li key={i} className={`tabs__item ${tab === i ? 'tabs__item--selected' : ''}`} onClick={() => setTab(i)}>
+                      { isToday(day.date) && <div className="tabs__today">сёння</div> }
+                      <div className="tabs__weekDate">{format(day.date, 'EEEEEE', { locale: be })}</div>
+                      <div className="tabs__date">{format(day.date, 'dd.MM', { locale: be })}</div>
+                    </li>
+                  ))
+                }
+              </ul>
+
+              <section className="timetable__main">
+                <section className="timetable__section">
+                  <table className="timetable__body">
+                    <tbody>
+                    {
+                      schedule[tab].massHours.map((massHours, k) => (
+                        <TimeTableLine
+                          massHours={massHours}
+                          key={k}
+                          onDelete={(data) => handleDeleteModalOpen(data, schedule[tab], massHours)}
+                        />
+                      ))
+                    }
+                    </tbody>
+                  </table>
+                </section>
+              </section>
+            </>
+          )
+        }
 
       </section>
       <DeleteModal visible={visibleDelete} onSave={handleDelete} onClose={() => setVisibleDelete(false)} mass={selectedMass} date={selectedDay} />

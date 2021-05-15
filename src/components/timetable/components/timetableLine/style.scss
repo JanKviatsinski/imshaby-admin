@@ -1,0 +1,44 @@
+@import "./src/styles/_mixin";
+
+.timetableMobile {
+  &__line {
+    border-top: 1px solid var(--second-text-color);
+    &:first-child {
+      border-color: transparent;
+    }
+
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  &__section {
+    margin-bottom: 20px;
+  }
+  &__col1 {
+    width: 85px;
+  }
+  &__col2 {
+    width: 185px;
+  }
+  &__actions {
+    width: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &__comment {}
+
+  &__title {
+    @include font(14px, true);
+  }
+  &__time {
+    padding: 0 10px;
+  }
+  &__icon {
+    width: 17px;
+    height: 11px;
+  }
+}

@@ -11,7 +11,6 @@
   overflow: auto;
 }
 .modal {
-  width: 400px;
   background: #FFFFFF;
   border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.16);
@@ -21,6 +20,9 @@
   left: 50%;
   top: 160px;
   margin-left: -200px;
+  @include tablet {
+    width: 400px;
+  }
   &__header {
     margin-bottom: 20px;
     position: relative;
