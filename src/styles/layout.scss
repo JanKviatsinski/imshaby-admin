@@ -9,15 +9,11 @@ body {
   }
 }
 .container {
-  width: 1200px;
   margin: 0 auto;
+  @include tablet {
+    width: 748px;
+  }
   @include desktop {
     width: 1200px;
-  }
-  @include tablet {
-    width: 980px;
-  }
-  @include mobile {
-    width: 736px;
   }
 }

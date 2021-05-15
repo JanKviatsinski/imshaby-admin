@@ -1,10 +1,15 @@
 @import "./src/styles/_mixin";
 
 .parishEdit {
-  display: flex;
+  @include tablet() {
+    display: flex;
+  }
   &__photo {
-    width: 265px;
-    margin: 20px 45px 20px 20px;
+    text-align: center;
+    @include tablet() {
+      width: 265px;
+      margin: 20px 45px 20px 20px;
+    }
   }
   &__img {
     max-width: 100%;

@@ -1,13 +1,18 @@
 @import "./src/styles/_mixin";
 
 .parish {
-  display: flex;
+  @include tablet {
+    display: flex;
+  }
   &__photo {
     width: 100px;
     height: 100px;
     border-radius: 50%;
     overflow: hidden;
-    margin: 20px 45px 20px 20px;
+    margin: 0 auto;
+    @include tablet {
+      margin: 20px 45px 20px 20px;
+    }
   }
   &__img {
     max-width: 100%;

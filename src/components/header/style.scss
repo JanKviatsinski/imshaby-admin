@@ -15,9 +15,9 @@
 .link {
   display: flex;
   align-items: center;
-  min-height: 50px;
-  padding: 0 20px;
-  font-size: 18px;
+  min-height: 32px;
+  padding: 0 8px;
+  font-size: 15px;
   color: var(--main-button-text-color);
   text-transform: uppercase;
   &:hover {
@@ -34,12 +34,17 @@
     padding: 0 16px;
     font-size: 15px;
   }
+  @include desktop() {
+    min-height: 50px;
+    padding: 0 20px;
+    font-size: 18px;
+  }
 }
 
 .icon {
   width: 24px;
   height: 24px;
-  @include tablet() {
+  @include mobile() {
     width: 15px;
     height: 15px;
   }
@@ -50,15 +55,32 @@
 .help {
   display: flex;
   .icon {
-    margin-right: 10px;
+    @include mobile() {
+      margin-right: 4px;
+    }
+    @include tablet() {
+      margin-right: 10px;
+    }
   }
 }
-.logo .icon {
-  width: 40px;
-  height: 40px;
-  margin-right: 20px;
-  @include tablet() {
+
+.logo {
+  .icon {
     width: 20px;
     height: 20px;
+    margin-right: 0;
+    @include tablet() {
+      margin-right: 20px;
+    }
+    @include desktop {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  &__text {
+    display: block;
+    @include mobile() {
+      display: none;
+    }
   }
 }

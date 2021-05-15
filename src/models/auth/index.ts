@@ -26,8 +26,6 @@ export const createAuthClientFx = createEffect(async () => {
       client_id: REACT_APP_AUTH_CLIENT_ID,
       redirect_uri: `${window.location.origin}/login`,
       audience: REACT_APP_AUTH_AUDIENCE,
-      useRefreshTokens: true,
-      cacheLocation: 'localstorage'
     });
   }
   return client;
