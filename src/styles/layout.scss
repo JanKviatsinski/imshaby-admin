@@ -9,9 +9,13 @@ body {
   }
 }
 .container {
-  margin: 0 auto;
+  margin: 0 5px;
   @include tablet {
+    margin: 0 auto;
     width: 748px;
+  }
+  @include tabletLandscape {
+    width: 980px;
   }
   @include desktop {
     width: 1200px;

@@ -123,7 +123,7 @@ const TimeTable = ({ schedule }: props) => {
               schedule.map((day: Schedule, i) => (
                 <li key={i} className={`tabs__item ${tab === i ? 'tabs__item--selected' : ''}`} onClick={() => setTab(i)}>
                   { isToday(day.date) && <div className="tabs__today">сёння</div> }
-                  <div className="tabs__date">{format(day.date, 'EEEE', { locale: be })}</div>
+                  <div className="tabs__weekDate">{format(day.date, 'EEEE', { locale: be })}</div>
                   <div className="tabs__date">{format(day.date, 'dd.MM', { locale: be })}</div>
                 </li>
               ))
@@ -175,7 +175,7 @@ const TimeTable = ({ schedule }: props) => {
                   schedule.map((day: Schedule, i) => (
                     <li key={i} className={`tabs__item ${tab === i ? 'tabs__item--selected' : ''}`} onClick={() => setTab(i)}>
                       { isToday(day.date) && <div className="tabs__today">сёння</div> }
-                      <div className="tabs__date">{format(day.date, 'EEEEEE', { locale: be })}</div>
+                      <div className="tabs__weekDate">{format(day.date, 'EEEEEE', { locale: be })}</div>
                       <div className="tabs__date">{format(day.date, 'dd.MM', { locale: be })}</div>
                     </li>
                   ))

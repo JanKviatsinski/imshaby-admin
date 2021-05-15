@@ -178,6 +178,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  border-bottom: 1px solid var(--second-text-color);
   &__item {
     cursor: pointer;
     border-bottom: 2px solid transparent;
@@ -188,8 +189,13 @@
       border-color: var(--active-btn-background);
     }
   }
-  &__date {
+  &__weekDate {
     @include font(15px, true, 21px);
+    text-transform: uppercase;
+    text-align: center;
+  }
+  &__date {
+    @include font(13px, false, 21px);
     text-transform: uppercase;
     text-align: center;
   }

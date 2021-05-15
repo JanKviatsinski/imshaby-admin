@@ -10,7 +10,13 @@ $desktop-width: 1280px;
 }
 
 @mixin tablet {
-  @media (min-width: #{$mobile-width + 1px}) {
+  @media (min-width: #{$mobile-width - 1px}) {
+    @content;
+  }
+}
+
+@mixin tabletLandscape {
+  @media (min-width: #{$tablet-width - 1px}) {
     @content;
   }
 }
