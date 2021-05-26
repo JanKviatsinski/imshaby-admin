@@ -1,6 +1,6 @@
 import { attach, forward, guard } from 'effector';
 import {
-  $mass, $massDeleted,
+  $mass, $massDeleted, $massError,
   $massMode,
   $massUpdated,
   changeMassMode,
@@ -22,6 +22,16 @@ $mass
   .on(getMassFx.doneData, (state, payload) => payload)
   .on(updateMassStore, (state, payload) => (payload || state))
   .reset([resetMass]);
+
+$massError
+  .on([createMassFx.doneData, changeMassMode], (state, payload) => ({
+    error: false,
+    message: '',
+  }))
+  .on([createMassFx.fail, updateMassFx.fail], (state,payload) => ({
+    error: true,
+    message: 'Імша на гэты час ужо ёсць у раскладзе.'
+  }));
 
 $massMode
   .on(changeMassMode, (state, payload) => payload)

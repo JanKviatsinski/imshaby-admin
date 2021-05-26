@@ -5,7 +5,7 @@
     display: flex;
   }
   &__photo {
-    width: 100px;
+    min-width: 100px;
     height: 100px;
     border-radius: 50%;
     overflow: hidden;
@@ -13,27 +13,46 @@
     @include tablet {
       margin: 20px 45px 20px 20px;
     }
+    @include mobile {
+      display: none;
+    }
   }
   &__img {
     max-width: 100%;
   }
 
   &__content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 
+  }
+  &__actualPeriod {
+    width: 370px;
+    display: block;
+    @include mobile {
+      display: none;
+    }
+    @include tablet {
+      display: none;
+    }
+    @include tabletLandscape {
+      display: block;
+    }
+  }
+  &__txt {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  &__value {
+    @include font(50px, true, 68px);
+    text-align: center;
   }
 }
 
 .parishPeriod {
   margin-bottom: 16px;
-  &__txt {}
-  &__value {
-    margin: 0 10px;
-    @include font(20px, true, 30px);
-    &--attention {
-      @include font(22px, true, 30px);
-      color: var(--normal-btn-background);
-    }
-  }
+
 }
 
 .parishApprovePeriod {

@@ -17,11 +17,13 @@
   border-radius: 4px;
   padding: 20px 30px;
   position: absolute;
-  left: 50%;
+  width: 100%;
   top: 160px;
-  margin-left: -200px;
+
   @include tablet {
     width: 400px;
+    margin-left: -200px;
+    left: 50%;
   }
   &__header {
     margin-bottom: 20px;
@@ -59,4 +61,13 @@
     }
   }
 
+  &__error {
+    position: absolute;
+    right: 0;
+    bottom: -20px;
+  }
+  &__error-text {
+    @include font(10px, false, 20px);
+    color: var(--normal-btn-background)
+  }
 }

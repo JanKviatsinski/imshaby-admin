@@ -100,10 +100,10 @@ const CreateModalResult = () => {
                   <div className="success__title">Тэрмін дзеяння</div>
                   <div className="success__value">
                     {
-                    (!mass.startDate && !mass.endDate && mass.days?.length)
-                      ? <InfinityIcon className="success__infinity" />
-                      : <span>{period}</span>
-                  }
+                      !mass.endDate && mass.days
+                        ? <InfinityIcon className="success__infinity" />
+                        : <span>{period}</span>
+                    }
                   </div>
                 </li>
                 {

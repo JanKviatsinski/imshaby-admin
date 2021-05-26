@@ -63,39 +63,39 @@ const ParishEdit = () => {
                 <span className="parishInfo__address">{parish.address}</span>
               </div>
             </li>
-            <li className="parishInfo__item">
-              <div className="parishInfo__name">
-                <PhoneIcon className="parishInfo__icon" />
-                {' '}
-                Тэлефон
-              </div>
-              <div className="parishInfo__field">
-                <a href={`tel:${phone}`} className="parishInfo__value">{phone}</a>
-                <input type="text" className="parishInfo__input" value={phone} onChange={(e) => setPhone(e.target.value)} />
-              </div>
-            </li>
-            <li className="parishInfo__item">
-              <div className="parishInfo__name">
-                <PhoneIcon className="parishInfo__icon" />
-                {' '}
-                Вэбсайт
-              </div>
-              <div className="parishInfo__field">
-                <a href={`${website}`} className="parishInfo__value" target="_blank">{website}</a>
-                <input type="text" className="parishInfo__input" value={website} onChange={(e) => setWebsite(e.target.value)} />
-              </div>
-            </li>
-            <li className="parishInfo__item">
-              <div className="parishInfo__name">
-                <EmailIcon className="parishInfo__icon" />
-                {' '}
-                Эл. пошта
-              </div>
-              <div className="parishInfo__field">
-                <a href={`mailto:${email}`} className="parishInfo__value">{email}</a>
-                <input type="text" className="parishInfo__input" value={email} onChange={(e) => setEmail(e.target.value)} />
-              </div>
-            </li>
+            {/*<li className="parishInfo__item">*/}
+            {/*  <div className="parishInfo__name">*/}
+            {/*    <PhoneIcon className="parishInfo__icon" />*/}
+            {/*    {' '}*/}
+            {/*    Тэлефон*/}
+            {/*  </div>*/}
+            {/*  <div className="parishInfo__field">*/}
+            {/*    <a href={`tel:${phone}`} className="parishInfo__value">{phone}</a>*/}
+            {/*    <input type="text" className="parishInfo__input" value={phone} onChange={(e) => setPhone(e.target.value)} />*/}
+            {/*  </div>*/}
+            {/*</li>*/}
+            {/*<li className="parishInfo__item">*/}
+            {/*  <div className="parishInfo__name">*/}
+            {/*    <PhoneIcon className="parishInfo__icon" />*/}
+            {/*    {' '}*/}
+            {/*    Вэбсайт*/}
+            {/*  </div>*/}
+            {/*  <div className="parishInfo__field">*/}
+            {/*    <a href={`${website}`} className="parishInfo__value" target="_blank">{website}</a>*/}
+            {/*    <input type="text" className="parishInfo__input" value={website} onChange={(e) => setWebsite(e.target.value)} />*/}
+            {/*  </div>*/}
+            {/*</li>*/}
+            {/*<li className="parishInfo__item">*/}
+            {/*  <div className="parishInfo__name">*/}
+            {/*    <EmailIcon className="parishInfo__icon" />*/}
+            {/*    {' '}*/}
+            {/*    Эл. пошта*/}
+            {/*  </div>*/}
+            {/*  <div className="parishInfo__field">*/}
+            {/*    <a href={`mailto:${email}`} className="parishInfo__value">{email}</a>*/}
+            {/*    <input type="text" className="parishInfo__input" value={email} onChange={(e) => setEmail(e.target.value)} />*/}
+            {/*  </div>*/}
+            {/*</li>*/}
 
             <li className="parishInfo__item">
               <div className="parishInfo__name">
