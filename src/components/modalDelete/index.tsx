@@ -39,7 +39,7 @@ const DeleteModal = ({
       setPeriod('');
       if (mass.endDate) {
         const endDate = parse(mass.endDate, 'MM/dd/yyyy', new Date());
-        setPeriod(`да ${format(endDate, 'dd MMMM yyyy, eeeeee', { locale: be })}`);
+        setPeriod(`па ${format(endDate, 'dd MMMM yyyy, eeeeee', { locale: be })}`);
       }
     }
   }, [mass]);

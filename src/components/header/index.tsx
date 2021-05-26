@@ -29,10 +29,10 @@ const Header = () => (
       </section>
 
       <section className="help">
-        <NavLink to="/help" className="link" activeClassName="link__active">
-          <BulbIcon className="icon" />
-          <span>дапамога</span>
-        </NavLink>
+        {/*<NavLink to="/help" className="link" activeClassName="link__active">*/}
+        {/*  <BulbIcon className="icon" />*/}
+        {/*  <span>дапамога</span>*/}
+        {/*</NavLink>*/}
       </section>
 
     </section>

@@ -147,6 +147,7 @@ a, path {
 
 .form {
   &__row {
+    position: relative;
     margin-bottom: 25px;
     &--column {
       display: flex;

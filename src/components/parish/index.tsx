@@ -27,27 +27,26 @@ export const Parish = () => {
         <img src={`https://imsha.by/${parish.imgPath}`} alt={parish.name} className="parish__img" />
       </aside>
       <section className="parish__content">
-        <div className="parishPeriod">
-          <span className="parishPeriod__txt">Перыяд актуальнасці Імшаў</span>
-          <span className="parishPeriod__value">{formatDate(parish.updatePeriodInDays)}</span>
-        </div>
-        <div className="parishPeriod">
-          <span className="parishPeriod__txt">Прайшло</span>
-          <span className="parishPeriod__value">
+        <section className="parish__limitTimer">
+          <div className="parish__txt">З моманту пацверджання актуальнасці раскладу прайшло</div>
+          <div className="parishPeriod">
             <LimitTimer
               lastDate={parish.lastMassActualDate}
               limitDays={parish.updatePeriodInDays}
-              attentionClass="parishPeriod__value--attention"
             />
-          </span>
-          <span className="parishPeriod__txt">з моманту пацверджання актуальнасці раскладу</span>
-        </div>
+          </div>
 
-        <div className="parishApprovePeriod">
-          <button className="btn" onClick={handleApprove}>
-            Пацвердзіць актуальнасць раскладу
-          </button>
-        </div>
+          <div className="parishApprovePeriod">
+            <button className="btn" onClick={handleApprove}>
+              Пацвердзіць актуальнасць раскладу
+            </button>
+          </div>
+        </section>
+        <section className="parish__actualPeriod">
+          <div className="parish__txt">Перыяд актуальнасці Імшаў</div>
+          <div className="parish__value">{formatDate(parish.updatePeriodInDays)}</div>
+        </section>
+
 
       </section>
     </section>

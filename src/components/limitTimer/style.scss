@@ -1,63 +1,53 @@
 @import "./src/styles/_mixin";
 
-.header {
+.limitTimer {
   display: flex;
-  align-items: center;
-  background: var(--main-text-color);
-  margin-bottom: 16px;
-  &__container {
-    display: flex;
-    justify-content: space-between;
+  justify-content: center;
+  &__attention {
+    color: var(--hover-btn-background);
   }
-}
-
-.link {
-  display: flex;
-  align-items: center;
-  min-height: 50px;
-  padding: 0 20px;
-  font-size: 18px;
-  color: var(--main-button-text-color);
-  text-transform: uppercase;
-  &:hover {
-    background: var(--hover-btn-background);
+  &__item {
+    position: relative;
+    padding-bottom: 20px;
+    min-width: 70px;
+    margin: 0 20px;
+    @include mobile {
+      margin: 0 10px;
+      min-width: 35px;
+      padding-bottom: 10px;
+    }
+    &:first-child {
+      margin-left: 0;
+      .limitTimer__header:before {
+        display: none;
+      }
+    }
   }
-  &:active {
-    background: var(--active-btn-background);
+  &__header {
+    @include font(50px, true, 68px);
+    text-align: center;
+    @include mobile {
+      @include font(30px, true, 30px);
+    }
+    &:before {
+      content: ':';
+      position: absolute;
+      left: -26px;
+      display: block;
+      @include mobile {
+        left: -14px;
+      }
+    }
   }
-  &__active, &__active:hover {
-    background: var(--normal-btn-background);
-  }
-  @include tablet() {
-    min-height: 32px;
-    padding: 0 16px;
-    font-size: 15px;
-  }
-}
-
-.icon {
-  width: 24px;
-  height: 24px;
-  @include tablet() {
-    width: 15px;
-    height: 15px;
-  }
-}
-
-.logo,
-.menu,
-.help {
-  display: flex;
-  .icon {
-    margin-right: 10px;
-  }
-}
-.logo .icon {
-  width: 40px;
-  height: 40px;
-  margin-right: 20px;
-  @include tablet() {
-    width: 20px;
-    height: 20px;
+  &__content {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    @include font(16px, false);
+    color: var(--main-text-color);
+    text-align: center;
+    @include mobile {
+      @include font(10px, false);
+    }
   }
 }

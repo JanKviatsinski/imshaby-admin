@@ -12,7 +12,7 @@ import { CloseIcon, YoutubeIcon } from '../icons';
 import Modal from '../modal';
 
 import {
-  $mass, $massMode, $massUpdated, resetMassMode, saveMass, updateMassStore,
+  $mass, $massMode, $massUpdated, resetMassMode, saveMass, updateMassStore, $massError
 } from '../../models/mass';
 import { Mass, MassMode } from '../../models/mass/types';
 
@@ -37,10 +37,12 @@ const CreateModal = () => {
   const mass = useStore($mass);
   const massMode = useStore($massMode);
   const massUpdated = useStore($massUpdated);
+  const massError = useStore($massError);
   const visible = massMode !== MassMode.HIDDEN && !massUpdated;
 
   useEffect(() => {
     setSubmitted(false);
+    if (!visible) resetForm();
   }, [visible]);
 
   useEffect(() => {
@@ -195,7 +197,15 @@ const CreateModal = () => {
                     <input type="text" onChange={handleChangeTime} value={time} placeholder="09:00" />
                   </div>
                 </div>
+                {
+                  massError.error && <>
+                    <section className="modal__error">
+                      <span className="modal__error-text">{massError.message}</span>
+                    </section>
+                  </>
+                }
               </section>
+
 
               <section className="form__row">
                 <div className="form__col">

@@ -1,8 +1,9 @@
 import { createEffect, createEvent, createStore } from 'effector';
 import { api } from '../app';
-import { Mass, MassMode, Period } from './types';
+import { Mass, MassError, MassMode, Period } from './types';
 
 export const $mass = createStore<Mass | null>(null);
+export const $massError = createStore<MassError>({ error: false });
 export const $massMode = createStore<MassMode>(MassMode.HIDDEN);
 export const $massUpdated = createStore<boolean>(false);
 export const $massDeleted = createStore<boolean>(false);
@@ -29,17 +30,24 @@ export const getMassFx = createEffect(async (mass_id: string) => {
 export const createMassFx = createEffect(async (mass: Mass | null) => {
   if (!mass) return;
 
-  const res = await api?.post('mass', mass);
-  if (!res?.data) return new Error('Creating Mass has been failed');
-  return res.data;
+  try {
+    const { data } = await api?.post('mass', mass);
+    return data
+  }catch (e) {
+    throw Error(e)
+  }
+
 });
 
 export const updateMassFx = createEffect(async (mass: Mass | null) => {
   if (!mass) return;
 
-  const res = await api?.put(`mass/${mass.id}`, mass);
-  if (!res?.data) return new Error('Editing Mass has been failed');
-  return res.data;
+  try {
+    const { data } = await api?.put(`mass/${mass.id}`, mass);
+    return data
+  }catch (e) {
+    throw Error(e)
+  }
 });
 
 export const deleteMassFx = createEffect(async (params: { mass_id: string, period: Period }) => {
