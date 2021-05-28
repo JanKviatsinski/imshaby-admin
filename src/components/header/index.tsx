@@ -11,7 +11,7 @@ const Header = () => (
     <section className="container header__container">
 
       <section className="logo">
-        <a href="https://imsha.by" className="link">
+        <a href="https://qa.imsha.by" className="link">
           <LogoIcon className="icon" />
           <span className="logo__text">imsha.by</span>
         </a>
@@ -28,12 +28,12 @@ const Header = () => (
         </NavLink>
       </section>
 
-      <section className="help">
-        {/*<NavLink to="/help" className="link" activeClassName="link__active">*/}
-        {/*  <BulbIcon className="icon" />*/}
-        {/*  <span>дапамога</span>*/}
-        {/*</NavLink>*/}
-      </section>
+      {/*<section className="help">*/}
+      {/*  <NavLink to="/help" className="link" activeClassName="link__active">*/}
+      {/*    <BulbIcon className="icon" />*/}
+      {/*    <span>дапамога</span>*/}
+      {/*  </NavLink>*/}
+      {/*</section>*/}
 
     </section>
   </header>
