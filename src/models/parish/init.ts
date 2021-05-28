@@ -9,7 +9,7 @@ $parish
   .on(fetchParishFx.doneData, (_, parish) => parish);
 
 sample({
-  clock: [ParishGate.open, approveScheduleFx],
+  clock: [ParishGate.open, approveScheduleFx.doneData],
   source: $user,
   fn: (params) => params.parish_id,
   target: fetchParishFx,
