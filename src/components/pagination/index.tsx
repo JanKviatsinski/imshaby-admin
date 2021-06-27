@@ -43,7 +43,7 @@ const Pagination = ({ schedule, changeDate, isCurrentWeek }: props) => {
         )
       }
       {
-        !!schedule.schedule.length && (
+        !!schedule.startWeekDate && (
         <>
           <span className="pagination__date">
             {format(startPeriod, 'd')}

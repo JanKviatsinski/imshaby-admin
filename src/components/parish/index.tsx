@@ -17,7 +17,7 @@ export const Parish = () => {
 
   const handleApprove = async () => {
     approveSchedule();
-    addToast('Рассклад пацверджаны');
+    addToast('Расклад падцверджаны');
   };
 
   if (!parish) return <Loading />;
@@ -28,7 +28,7 @@ export const Parish = () => {
       </aside>
       <section className="parish__content">
         <section className="parish__limitTimer">
-          <div className="parish__txt">З моманту пацверджання актуальнасці раскладу прайшло</div>
+          <div className="parish__txt">З моманту падцверджання актуальнасці раскладу прайшло</div>
           <div className="parishPeriod">
             <LimitTimer
               lastDate={parish.lastMassActualDate}
@@ -38,7 +38,7 @@ export const Parish = () => {
 
           <div className="parishApprovePeriod">
             <button className="btn" onClick={handleApprove}>
-              Пацвердзіць актуальнасць раскладу
+              Падцвердзіць актуальнасць раскладу
             </button>
           </div>
         </section>
