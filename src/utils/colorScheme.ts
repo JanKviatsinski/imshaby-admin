@@ -5,8 +5,7 @@ if (currentTheme === 'dark') {
 }
 
 function activateDarkMode() {
-  const rootElement: Element | null = document.querySelector(':root');
-  localStorage.setItem('theme', 'dark');
+  const rootElement = document.querySelector<HTMLHtmlElement>(':root');
   const darkTheme: {[key: string]: string} = {
     '--main-text-color': '#F2F2F2',
     '--second-text-color': '#B3B3B3',
@@ -25,15 +24,16 @@ function activateDarkMode() {
     '--disabled-btn': 'rgba(183, 32, 37, .5)',
     '--error': 'red',
   };
+  
+  localStorage.setItem('theme', 'dark');
 
   for (let color in darkTheme) {
-    rootElement.style.setProperty(color, darkTheme[color])
+    rootElement?.style.setProperty(color, darkTheme[color]);
   }
-};
+}
 
 function activateLightMode() {
-  const rootElement = document.querySelector(':root');
-  localStorage.setItem('theme', 'light');
+  const rootElement = document.querySelector<HTMLElement>(':root');
   const lightTheme: {[key: string]: string} = {
     '--main-text-color': '#333333',
     '--second-text-color': '#B3B3B3',
@@ -53,8 +53,10 @@ function activateLightMode() {
     '--error': 'red',
   };
 
+  localStorage.setItem('theme', 'light');
+
   for (let color in lightTheme) {
-    rootElement.style.setProperty(color, lightTheme[color])
+    rootElement?.style.setProperty(color, lightTheme[color]);
   }
 }
 
