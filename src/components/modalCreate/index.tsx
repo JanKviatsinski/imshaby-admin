@@ -92,7 +92,11 @@ const CreateModal = () => {
     setEndDate(date);
   };
   const handleChangeTime = (e: React.FormEvent<HTMLInputElement>) => {
-    setTime(e.currentTarget.value);
+    const value = e.currentTarget.value;
+    const regExp = /^[0-9:]+$/;
+    if (value.match(regExp) && value.length <= 5 || value.length === 0) {
+      setTime(value);
+    }
   };
   const handleSelectDay = (day: number) => () => {
     const index = days.findIndex((i) => i === day);
